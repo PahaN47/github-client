@@ -1,0 +1,57 @@
+@import '../../styles/mixins.scss';
+
+.text {
+  &[data-view='title'] {
+    @include text-title;
+  }
+
+  &[data-view='button'] {
+    @include text-button;
+  }
+
+  &[data-view='p-20'] {
+    @include text-p-20;
+  }
+
+  &[data-view='p-18'] {
+    @include text-p-18;
+  }
+
+  &[data-view='p-16'] {
+    @include text-p-16;
+  }
+
+  &[data-view='p-14'] {
+    @include text-p-14;
+  }
+
+  &[data-color='primary'] {
+    color: var(--text-primary);
+  }
+
+  &[data-color='secondary'] {
+    color: var(--text-secondary);
+  }
+
+  &[data-color='accent'] {
+    color: var(--text-accent);
+  }
+
+  &[data-weight='normal'] {
+    font-weight: 400;
+  }
+
+  &[data-weight='medium'] {
+    font-weight: 500;
+  }
+
+  &[data-weight='bold'] {
+    font-weight: 700;
+  }
+
+  &.limit-lines {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+  }
+}

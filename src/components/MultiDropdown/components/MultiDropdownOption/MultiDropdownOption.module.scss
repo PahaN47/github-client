@@ -1,0 +1,19 @@
+.option {
+  padding: var(--space-s) var(--space-xs);
+  color: var(--dropdown-option-text);
+  text-align: start;
+  background: var(--dropdown-options-bg);
+  border: none;
+  border-radius: var(--border-radius);
+  transition: all var(--dropdown-option-transition-duration);
+
+  &:hover {
+    color: var(--dropdown-option-text-hover);
+    background: var(--dropdown-options-bg-hover);
+  }
+
+  &.selected {
+    color: var(--dropdown-option-text-selected);
+    background: var(--dropdown-options-bg-selected);
+  }
+}

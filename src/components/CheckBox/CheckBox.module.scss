@@ -1,0 +1,45 @@
+.label {
+  position: relative;
+  display: flex;
+  width: 40px;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box;
+  color: var(--checkbox-check);
+  background: var(--checkbox-bg);
+  border: 1px solid var(--checkbox-border);
+  transition: all var(--input-transition-duration);
+
+  .input {
+    width: calc(100% + 2px);
+    aspect-ratio: 1 / 1;
+    margin: -1px;
+    border-radius: var(--border-radius);
+    opacity: 0;
+
+    &:checked ~ .check {
+      opacity: 1;
+    }
+  }
+
+  .check {
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    width: calc(100% + 2px);
+    height: calc(100% + 2px);
+    opacity: 0;
+    transition: all var(--input-check-transition-duration);
+  }
+
+  &:hover {
+    color: var(--checkbox-check-hover);
+    background: var(--checkbox-bg-hover);
+    border-color: var(--checkbox-border-hover);
+  }
+
+  &.disabled {
+    color: var(--checkbox-check-disabled);
+    background: var(--checkbox-bg-disabled);
+    border-color: var(--checkbox-border-disabled);
+  }
+}

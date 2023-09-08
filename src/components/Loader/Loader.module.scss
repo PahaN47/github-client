@@ -1,0 +1,52 @@
+@keyframes loader-wrap {
+  from {
+    transform: rotate(80deg);
+  }
+
+  to {
+    transform: rotate(1520deg);
+  }
+}
+
+@keyframes loader {
+  from {
+    stroke-dashoffset: 126;
+  }
+  to {
+    stroke-dashoffset: 1366;
+  }
+}
+
+.loader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  pointer-events: none;
+
+  width: 60px;
+
+  &[data-size='s'] {
+    width: 24px;
+  }
+
+  &[data-size='m'] {
+    width: 48px;
+  }
+
+  svg {
+    width: calc((2 / 3) * 100%);
+    aspect-ratio: 1 / 1;
+    animation: var(--loader-animation-duration) loader-wrap infinite linear;
+    transform: rotate(80deg);
+
+    circle {
+      fill: none;
+      stroke: var(--loader-bg);
+      stroke-width: 30;
+      stroke-dasharray: 620 620;
+      animation: var(--loader-animation-duration) loader infinite linear;
+      stroke-dashoffset: 126;
+    }
+  }
+}

@@ -1,0 +1,82 @@
+:root {
+  // BORDER RADIUS (for some reason??)
+  --border-radius: 0;
+
+  // ANIMATIONS
+  --loader-animation-duration: 3s;
+  --button-transition-duration: 500ms;
+  --card-transition-duration: 500ms;
+  --input-transition-duration: 500ms;
+  --dropdown-option-transition-duration: 500ms;
+  --input-transition-duration: 500ms;
+  --input-check-transition-duration: 300ms;
+
+  // SPACING
+  --space-xl: 24px;
+  --space-l: 20px;
+  --space-m: 16px;
+  --space-s: 14px;
+  --space-xs: 12px;
+  --space-xxs: 8px;
+
+  // THEME COLORS
+  --brand: #518581;
+  --brand-hover: #86aaa7;
+  --brand-active: #487773;
+
+  // LOADER COLORS
+  --loader-bg: var(--brand);
+
+  // TEXT COLORS
+  --text-primary: #000000;
+  --text-secondary: #afadb5;
+  --text-accent: var(--brand);
+
+  // BUTTON COLORS
+  --button-primary-bg: var(--brand);
+  --button-primary-text: #ffffff;
+  --button-primary-bg-hover: var(--brand-hover);
+  --button-primary-text-hover: var(--button-primary-text);
+  --button-primary-bg-disabled: #d9d9d9;
+  --button-primary-text-disabled: var(--button-primary-text);
+  --button-primary-bg-active: var(--brand-active);
+  --button-primary-text-active: var(--button-primary-text);
+
+  // CARD COLORS
+  --card-image-bg: #d9d9d9;
+  --card-bg: #ffffff;
+  --card-shadow-hover: 0 4px 10px #00000040;
+
+  // INPUT COLORS
+  --input-bg: #ffffff;
+  --input-bg-disabled: var(--input-bg);
+  --input-bg-focus: var(--input-bg);
+  --input-border: var(--input-bg);
+  --input-border-disabled: var(--input-bg);
+  --input-border-focus: var(--brand);
+  --input-placeholder: var(--text-secondary);
+  --input-text: var(--text-primary);
+  --input-text-disabled: #00000033;
+  --input-text-focus: var(--input-text);
+  --input-caret: var(--text-primary);
+
+  // DROPDOWN COLORS
+  --dropdown-options-bg: #ffffff;
+  --dropdown-options-bg-hover: var(--dropdown-options-bg);
+  --dropdown-options-bg-selected: var(--dropdown-options-bg);
+  --dropdown-option-text: var(--text-primary);
+  --dropdown-option-text-hover: var(--text-secondary);
+  --dropdown-option-text-selected: var(--text-accent);
+  --dropdown-options-shadow: 0 4px 10px #00000040;
+
+  // CHECKBOX COLORS
+  --checkbox-bg: #ffffff;
+  --checkbox-bg-disabled: #ffffff80;
+  --checkbox-bg-hover: var(--checkbox-bg);
+  --checkbox-border: var(--checkbox-bg);
+  --checkbox-border-disabled: #ffffff00;
+  --checkbox-border-hover: var(--brand);
+  --checkbox-check: var(--brand);
+  --checkbox-check-disabled: #00000033;
+  --checkbox-check-hover: var(--checkbox-check);
+}

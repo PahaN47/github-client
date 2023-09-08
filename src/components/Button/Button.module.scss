@@ -1,0 +1,33 @@
+.button {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+  min-height: 52px;
+  padding: var(--space-s) var(--space-l);
+  color: var(--button-primary-text);
+  background: var(--button-primary-bg);
+  border: none;
+  border-radius: var(--border-radius);
+  transition: all var(--button-transition-duration);
+
+  &.disabled {
+    color: var(--button-primary-text-disabled);
+    background: var(--button-primary-bg-disabled);
+  }
+
+  &:not(:disabled) {
+    &:hover {
+      color: var(--button-primary-text-hover);
+      background: var(--button-primary-bg-hover);
+    }
+
+    &:active {
+      color: var(--button-primary-text-active);
+      background: var(--button-primary-bg-active);
+    }
+  }
+
+  .loader svg circle {
+    stroke: currentColor;
+  }
+}

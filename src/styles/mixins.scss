@@ -1,0 +1,35 @@
+@mixin text-button {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 18px;
+}
+
+@mixin text-title {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 48px;
+}
+
+@mixin text-p-20 {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+}
+
+@mixin text-p-18 {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 22px;
+}
+
+@mixin text-p-16 {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+@mixin text-p-14 {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 18px;
+}

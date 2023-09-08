@@ -1,0 +1,14 @@
+.wrap {
+  position: relative;
+}
+
+.options {
+  position: absolute;
+  top: calc(100% + var(--space-xxs));
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  box-shadow: var(--dropdown-options-shadow);
+}
