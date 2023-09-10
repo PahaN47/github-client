@@ -1,0 +1,8 @@
+.image {
+  width: 32px;
+  aspect-ratio: 1 / 1;
+  background-color: var(--image-bg);
+  border: 1px solid var(--image-border);
+  border-radius: 50%;
+  object-fit: cover;
+}

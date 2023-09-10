@@ -1,0 +1,7 @@
+.wrap {
+  display: grid;
+  gap: var(--space-xxs);
+  grid-template-columns: fit-content(16px) 1fr;
+  align-items: center;
+  color: var(--text-secondary);
+}

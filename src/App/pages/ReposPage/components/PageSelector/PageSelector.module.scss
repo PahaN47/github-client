@@ -1,0 +1,38 @@
+.wrap {
+  display: flex;
+  align-items: center;
+
+  .back,
+  .forward {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    min-height: 42px;
+    padding: 0;
+    color: var(--text-primary);
+    background: transparent;
+    border: none;
+    transition: all var(--button-transition-duration);
+
+    &:hover {
+      color: var(--text-accent);
+    }
+
+    &:disabled {
+      color: var(--text-secondary);
+    }
+  }
+
+  .back {
+    margin-right: var(--selector-arrow-space);
+  }
+
+  .forward {
+    margin-left: var(--selector-arrow-space);
+
+    svg {
+      transform: rotate(180deg);
+    }
+  }
+}

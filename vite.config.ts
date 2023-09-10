@@ -1,6 +1,6 @@
 import path from 'path';
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import tsconfig from './tsconfig.json';
 
 const SRC_PATH = path.resolve(__dirname, 'src');
@@ -11,20 +11,13 @@ const parseTsConfigPaths = (paths: Record<string, string[]>): Record<string, str
   );
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react({
-      babel: {
-        parserOpts: {
-          plugins: ['decorators-legacy', 'classProperties'],
-        },
-      },
-    }),
-  ],
-  resolve: {
-    alias: parseTsConfigPaths(tsconfig.compilerOptions.paths),
-  },
-  server: {
-    port: 3000,
-  },
-});
+export default () =>
+  defineConfig({
+    plugins: [react()],
+    resolve: {
+      alias: parseTsConfigPaths(tsconfig.compilerOptions.paths),
+    },
+    server: {
+      port: 3000,
+    },
+  });

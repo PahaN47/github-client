@@ -1,0 +1,18 @@
+@import "../../../../../styles/mixins.scss";
+
+.wrap {
+  display: flex;
+  gap: var(--space-xxs);
+
+  .topic {
+    display: flex;
+    padding: var(--space-xxxs) var(--space-m);
+    color: var(--topic-text);
+    background: var(--topic-bg);
+    border-radius: var(--topic-border-radius);
+
+    span {
+      @include text-topic;
+    }
+  }
+}

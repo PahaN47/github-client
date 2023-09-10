@@ -1,0 +1,17 @@
+.button {
+  min-width: 38px;
+  min-height: 42px;
+  padding: var(--space-xss);
+  border: none;
+  border-radius: 0;
+
+  & > div {
+    width: 100%;
+    justify-content: center;
+  }
+
+  &:not(.selected) {
+    color: var(--text-primary);
+    background: transparent;
+  }
+}

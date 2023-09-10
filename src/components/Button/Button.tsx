@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ className, loading, disabled, children,
     {...props}
   >
     {loading && <Loader className={cn['loader']} size="s" />}
-    <Text tag="div" view="button">
+    <Text className={cn['content']} tag="div" view="button">
       {children}
     </Text>
   </button>

@@ -10,5 +10,6 @@
   flex-direction: column;
   align-items: stretch;
   width: 100%;
+  border-radius: var(--border-radius);
   box-shadow: var(--dropdown-options-shadow);
 }

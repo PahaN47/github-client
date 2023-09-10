@@ -1,0 +1,21 @@
+@import "../../styles/mixins.scss";
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+
+  .content {
+    @include scroll-bar;
+    flex-grow: 1;
+
+    &[data-background="primary"] {
+      background: var(--page-bg-primary);
+    }
+
+    &[data-background="secondary"] {
+      background: var(--page-bg-secondary);
+    }
+  }
+}
