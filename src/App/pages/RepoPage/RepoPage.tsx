@@ -1,7 +1,7 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { observer } from 'mobx-react';
-import React, { useEffect, useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
 import Text from 'components/Text';
@@ -19,21 +19,15 @@ const RepoPage: React.FC = () => {
   const { currentRepo, currentRepoStatus, getCurrentRepo, resetCurrentRepo } = useStore((store) => store.repos);
 
   const loading = currentRepoStatus === FetchStatus.PENDGING;
-
-  const location = useLocation();
-
-  const locationRepo = useMemo(() => {
-    const locationSplit = location.pathname.split('/');
-    return { owner: locationSplit[locationSplit.length - 2], name: locationSplit[locationSplit.length - 1] };
-  }, [location.pathname]);
+  const { owner, name } = useParams();
 
   useEffect(() => () => resetCurrentRepo(), [resetCurrentRepo]);
 
   useEffect(() => {
     if (!currentRepo && currentRepoStatus === FetchStatus.IDLE) {
-      getCurrentRepo(locationRepo);
+      getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
     }
-  }, [currentRepo, currentRepoStatus, getCurrentRepo, locationRepo]);
+  }, [currentRepo, currentRepoStatus, getCurrentRepo, name, owner]);
 
   return (
     <PageLayout className={cn['page']} background="secondary">

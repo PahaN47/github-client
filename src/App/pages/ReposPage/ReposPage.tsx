@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { observer } from 'mobx-react';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Card from 'components/Card';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
@@ -23,47 +23,53 @@ const getCardCaption = (stargazersCount: number, updatedAt: string) => {
 };
 
 const ReposPage: React.FC = () => {
-  const { repoList, getRepoList, repoListStatus, repoCount, pageLimit, org, page } = useStore((store) => store.repos);
+  const { repoList, getRepoList, repoListStatus, repoCount, pageLimit } = useStore((store) => store.repos);
+
+  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = useParams();
+
+  const page = +(searchParams.get('page') ?? 1);
+  const org = params.owner ?? '';
 
   const [filters, setFilters] = useState<FilterValues>({ org, types: [] });
 
   const pageCount = Math.ceil(repoCount / pageLimit);
   const loading = repoListStatus === FetchStatus.PENDGING;
 
-  const pageRef = useRef<HTMLDivElement>(null);
-
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (repoListStatus === FetchStatus.IDLE) {
-      getRepoList({ org: filters.org, page });
+      getRepoList({ org, page });
+      navigate(`/repos/${org}`);
+      setSearchParams({ page: page.toString() }, { replace: true });
     }
-  }, [filters, getRepoList, page, repoListStatus]);
+  }, [getRepoList, navigate, org, page, repoListStatus, setSearchParams]);
 
   const handleSearch = useCallback(
     ({ org }: FilterValues) => {
       getRepoList({ org });
+      navigate(`/repos/${org}`);
     },
-    [getRepoList],
+    [getRepoList, navigate],
   );
 
   const handlePageChange = useCallback(
     (page: number) => {
-      getRepoList({ org: filters.org, page });
-      pageRef.current?.scrollTo(0, 0);
+      getRepoList({ org, page });
+      setSearchParams({ page: page.toString() }, { replace: true });
     },
-    [filters.org, getRepoList],
+    [getRepoList, org, setSearchParams],
   );
 
   const makeHandleCardClick = useCallback(
     (name: string) => () => {
-      navigate(`${org}/${name}`, { relative: 'path' });
+      navigate(`/repos/${org}/${name}`, { relative: 'path' });
     },
     [navigate, org],
   );
 
   return (
-    <PageLayout className={cn['page']} ref={pageRef}>
+    <PageLayout className={cn['page']}>
       <div className={cn['title']}>
         <Text color="primary" view="title" maxLines={2}>
           List organization repositories

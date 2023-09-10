@@ -9,8 +9,8 @@ function App() {
     <StoreProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/repos" />} />
-          <Route path="/repos" element={<ReposPage />} />
+          <Route path="/" element={<Navigate to="/repos/ktsstudio" />} />
+          <Route path="/repos/:owner" element={<ReposPage />} />
           <Route path="/repos/:owner/:name" element={<RepoPage />} />
         </Routes>
       </BrowserRouter>
