@@ -1,29 +1,18 @@
-import { format } from 'date-fns';
 import { observer } from 'mobx-react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import Card from 'components/Card';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
+import Pagination from 'components/Pagination';
 import Text from 'components/Text';
-import StarIcon from 'components/icons/StarIcon';
 import { useStore } from 'store/store';
 import { FetchStatus } from 'store/types';
 import Filters, { FilterValues } from './components/Filters';
-import PageSelector from './components/PageSelector';
+import RepoCard from './components/RepoCard';
 import cn from './ReposPage.module.scss';
 
-const getCardCaption = (stargazersCount: number, updatedAt: string) => {
-  const dateUpdatedAt = new Date(updatedAt);
-  return `\u00a0${stargazersCount}${'\u00a0'.repeat(7)}Updated ${
-    dateUpdatedAt.getFullYear() === new Date().getFullYear()
-      ? format(new Date(updatedAt), 'dd MMM')
-      : format(new Date(updatedAt), 'dd MMM, y')
-  }`;
-};
-
 const ReposPage: React.FC = () => {
-  const { repoList, getRepoList, repoListStatus, repoCount, pageLimit } = useStore((store) => store.repos);
+  const { repoList, getRepoList, repoListStatus, repoCount, pageLimit } = useStore((store) => store.repoList);
 
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -61,8 +50,8 @@ const ReposPage: React.FC = () => {
     [getRepoList, org, setSearchParams],
   );
 
-  const makeHandleCardClick = useCallback(
-    (name: string) => () => {
+  const handleCardClick = useCallback(
+    (name: string) => {
       navigate(`/repos/${org}/${name}`, { relative: 'path' });
     },
     [navigate, org],
@@ -85,23 +74,19 @@ const ReposPage: React.FC = () => {
           <>
             <div className={cn['repos']}>
               {repoList.map(({ id, owner, stargazers_count, updated_at, name, description }) => (
-                <Card
+                <RepoCard
                   key={id}
                   className={cn['repo-card']}
-                  image={owner.avatar_url}
-                  captionSlot={
-                    <div className={cn['card-caption']}>
-                      <StarIcon color="default" />
-                      {getCardCaption(stargazers_count, updated_at)}
-                    </div>
-                  }
-                  title={name}
-                  subtitle={description}
-                  onClick={makeHandleCardClick(name)}
+                  avatar={owner.avatar_url}
+                  name={name}
+                  description={description}
+                  onClick={handleCardClick}
+                  stargazersCount={stargazers_count}
+                  updatedAt={updated_at}
                 />
               ))}
             </div>
-            <PageSelector page={page} onChange={handlePageChange} pageCount={pageCount} />
+            <Pagination page={page} onChange={handlePageChange} pageCount={pageCount} />
           </>
         ) : (
           <Loader className={cn['loader']} size="l" />

@@ -1,22 +1,8 @@
-export type RepoOwnerShort = {
+export type RepoOwner = {
   id: number;
   login: string;
   avatar_url: string;
-};
-
-export type RepoOwner = RepoOwnerShort & {
   public_repos: number;
-};
-
-export type Contributor = {
-  id: number;
-  login: string;
-  avatar_url: string;
-  name: string;
-};
-
-export type Readme = {
-  content: string;
 };
 
 export type Repo = {
@@ -27,7 +13,7 @@ export type Repo = {
   watchers_count: number;
   stargazers_count: number;
   forks_count: number;
-  owner: RepoOwnerShort;
+  owner: RepoOwner;
   private: boolean;
   updated_at: string;
   homepage: string;
@@ -36,18 +22,7 @@ export type Repo = {
   languages_url: string;
 };
 
-export type CurrentRepo = Repo & {
-  contributors: Contributor[];
-  languages: Record<string, number>;
-  readme?: string;
-};
-
 export type GetRepoListProps = {
   org: string;
   page?: number;
-};
-
-export type GetCurrentRepoProps = {
-  owner: string;
-  name: string;
 };

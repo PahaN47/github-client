@@ -1,30 +1,30 @@
-import { makeAutoObservable } from 'mobx';
 import React, { useContext } from 'react';
-import RepoStore, { repoStoreInitialValue } from 'store/RepoStore';
+import CurrentRepoStore, { currentRepoStoreInitialValue } from 'store/CurrentRepoStore';
+import RepoListStore, { repoListStoreInitialValue } from 'store/RepoListStore';
 
 export interface StoreType {
-  repos: RepoStore;
+  repoList: RepoListStore;
+  currentRepo: CurrentRepoStore;
 }
 
-export const storeInitialValue: StoreType = {
-  repos: new RepoStore(repoStoreInitialValue),
+const storeInitialValue: StoreType = {
+  repoList: new RepoListStore(repoListStoreInitialValue),
+  currentRepo: new CurrentRepoStore(currentRepoStoreInitialValue),
 };
 
-export class Store implements StoreType {
-  repos: RepoStore;
+class Store implements StoreType {
+  repoList: RepoListStore;
+  currentRepo: CurrentRepoStore;
 
-  constructor({ repos }: StoreType) {
-    this.repos = repos;
-
-    makeAutoObservable(this);
+  constructor({ repoList, currentRepo }: StoreType) {
+    this.repoList = repoList;
+    this.currentRepo = currentRepo;
   }
 }
 
 const StoreContext = React.createContext<Store>(null as unknown as Store);
 
-export type StoreProviderProps = {
-  children: React.ReactNode;
-};
+export type StoreProviderProps = React.PropsWithChildren;
 
 const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => (
   <StoreContext.Provider value={new Store(storeInitialValue)}>{children}</StoreContext.Provider>

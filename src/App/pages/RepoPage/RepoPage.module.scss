@@ -1,4 +1,4 @@
-@import "../../../styles/mixins.scss";
+@import "styles/mixins.scss";
 
 .page {
   position: relative;
@@ -8,16 +8,6 @@
   gap: var(--space-xl);
   padding: var(--space-xxxl) var(--space-page-l) var(--space-page-xl) var(--space-page-s);
   overflow: auto;
-
-  .homepage {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xxs);
-
-    a {
-      text-decoration: none;
-    }
-  }
 
   .bottom-stats {
     display: flex;

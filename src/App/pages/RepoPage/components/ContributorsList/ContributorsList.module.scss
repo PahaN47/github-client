@@ -1,4 +1,4 @@
-@import "../../../../../styles/mixins.scss";
+@import "styles/mixins.scss";
 
 .wrap {
   display: flex;
@@ -17,25 +17,16 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 16px;
-        aspect-ratio: 1 / 1;
+        min-height: 16px;
+        min-width: 16px;
         box-sizing: border-box;
-        padding-top: var(--space-xxxs);
+        padding: var(--space-xxxs);
+        padding-bottom: 0;
         color: var(--tag-text);
         background: var(--tag-bg);
-        border-radius: 50%;
+        border-radius: 16px;
         content: attr(data-count);
       }
-    }
-  }
-
-  .user-wrap {
-    display: flex;
-    align-items: center;
-    gap: var(--space-xxs);
-
-    b {
-      color: var(--text-primary);
     }
   }
 }
