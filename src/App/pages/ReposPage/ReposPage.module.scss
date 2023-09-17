@@ -1,0 +1,44 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-xxxl) var(--space-page);
+  overflow: scroll;
+
+  .title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xl);
+    margin-bottom: var(--space-ml);
+  }
+
+  .repo-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 41px;
+    width: 100%;
+    margin-top: 36px;
+
+    .repos {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 80px;
+      width: 100%;
+
+      .card-caption {
+        display: flex;
+        align-items: center;
+      }
+    }
+
+    .loader {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+}

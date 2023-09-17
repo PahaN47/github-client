@@ -1,6 +1,9 @@
 :root {
   // BORDER RADIUS (for some reason??)
-  --border-radius: 0;
+  --border-radius: 6px;
+  --topic-border-radius: 20px;
+  --tag-border-radius: 16px;
+  --readme-border-radius: 4px;
 
   // ANIMATIONS
   --loader-animation-duration: 3s;
@@ -12,17 +15,35 @@
   --input-check-transition-duration: 300ms;
 
   // SPACING
+  --space-xxxxl: 80px;
+  --space-xxxl: 40px;
+  --space-xxl: 32px;
   --space-xl: 24px;
   --space-l: 20px;
+  --space-ml: 18px;
   --space-m: 16px;
   --space-s: 14px;
   --space-xs: 12px;
+  --space-xss: 10px;
   --space-xxs: 8px;
+  --space-xxxs: 4px;
+  --space-xxxxs: 2px;
+  --space-page-xl: 180px;
+  --space-page-l: 111px;
+  --space-page: 100px;
+  --space-page-s: 92px;
+  --selector-arrow-space: 15px;
 
   // THEME COLORS
-  --brand: #518581;
-  --brand-hover: #86aaa7;
-  --brand-active: #487773;
+  --brand: #1f883d;
+  --brand-hover: #1f883db3;
+  --brand-active: #08531d;
+  --color-hint: #7e7e7e;
+  --link-color: #0080ff;
+
+  // PAGE COLORS
+  --page-bg-primary: #f6f8fa;
+  --page-bg-secondary: #ffffff;
 
   // LOADER COLORS
   --loader-bg: var(--brand);
@@ -79,4 +100,26 @@
   --checkbox-check: var(--brand);
   --checkbox-check-disabled: #00000033;
   --checkbox-check-hover: var(--checkbox-check);
+
+  // NAVBAR COLORS
+  --navbar-bg: var(--page-bg-primary);
+  --navbar-border: #d9d9d9;
+
+  // IMAGE COLORS
+  --image-bg: #d9d9d9;
+  --image-border: #ecebeb;
+
+  // TOPIC COLORS
+  --topic-text: #0066cc;
+  --topic-bg: #daedff;
+
+  // TAG COLORS
+  --tag-bg: #d9d9d9;
+  --tag-text: #0000009e;
+
+  // README COLORS
+  --readme-border: #d9d9d9;
+
+  //SCROLLBAR COLORS
+  --scroll-default: #00000033;
 }

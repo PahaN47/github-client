@@ -1,0 +1,23 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  width: 100%;
+
+  .dropdown {
+    width: 300px;
+  }
+
+  .search {
+    display: flex;
+    gap: var(--space-l);
+
+    &-input {
+      flex-grow: 1;
+
+      & input::placeholder {
+        color: var(--color-hint);
+      }
+    }
+  }
+}

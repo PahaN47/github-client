@@ -37,7 +37,7 @@ const Card: React.FC<CardProps> = ({
     <div className={cn['content']}>
       <div className={cn['description']}>
         {captionSlot && (
-          <Text view="p-14" weight="medium" color="secondary">
+          <Text view="p-14" weight="medium" color="secondary" tag="div">
             {captionSlot}
           </Text>
         )}

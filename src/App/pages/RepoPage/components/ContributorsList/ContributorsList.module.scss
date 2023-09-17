@@ -1,0 +1,32 @@
+@import "styles/mixins.scss";
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+
+  .title {
+    .tag {
+      position: relative;
+
+      &::after {
+        @include text-tag;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 16px;
+        min-width: 16px;
+        box-sizing: border-box;
+        padding: var(--space-xxxs);
+        padding-bottom: 0;
+        color: var(--tag-text);
+        background: var(--tag-bg);
+        border-radius: 16px;
+        content: attr(data-count);
+      }
+    }
+  }
+}

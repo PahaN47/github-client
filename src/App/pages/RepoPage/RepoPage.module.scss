@@ -1,0 +1,39 @@
+@import "styles/mixins.scss";
+
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--space-xl);
+  padding: var(--space-xxxl) var(--space-page-l) var(--space-page-xl) var(--space-page-s);
+  overflow: auto;
+
+  .bottom-stats {
+    display: flex;
+    gap: 80px;
+  }
+
+  .readme-wrap {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--readme-border);
+    border-radius: var(--readme-border-radius);
+
+    .readme-title {
+      @include text-topic;
+      padding: var(--space-m);
+    }
+
+    .readme-content {
+      padding: var(--space-xxl);
+    }
+  }
+
+  .loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}

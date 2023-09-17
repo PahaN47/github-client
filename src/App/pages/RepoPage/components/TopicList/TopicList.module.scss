@@ -1,0 +1,6 @@
+@import "styles/mixins.scss";
+
+.wrap {
+  display: flex;
+  gap: var(--space-xxs);
+}

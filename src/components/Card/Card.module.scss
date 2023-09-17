@@ -5,6 +5,8 @@
   gap: var(--space-xl);
   padding-bottom: var(--space-xl);
   background: var(--card-bg);
+  border-radius: var(--border-radius);
+  overflow: hidden;
   transition: all var(--card-transition-duration);
 
   &:hover {

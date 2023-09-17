@@ -4,6 +4,8 @@
   line-height: 18px;
 }
 
+@import "./vars.scss";
+
 @mixin text-title {
   font-size: 44px;
   font-weight: 700;
@@ -32,4 +34,43 @@
   font-size: 14px;
   font-weight: 400;
   line-height: 18px;
+}
+
+@mixin text-topic {
+  font-size: 12px;
+  font-weight: 700;
+  line-height: normal;
+}
+
+@mixin text-tag {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 10px;
+}
+
+@mixin scroll-bar($thumb: 4px, $track: 16px, $color: var(--scroll-default)) {
+  scrollbar-gutter: stable;
+
+  &::-webkit-scrollbar {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar:vertical {
+    width: $track;
+  }
+
+  &::-webkit-scrollbar:horizontal {
+    height: $track;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $color;
+    background-clip: padding-box;
+    border: calc(($track - $thumb) / 2) solid transparent;
+    border-radius: 9999px;
+  }
 }

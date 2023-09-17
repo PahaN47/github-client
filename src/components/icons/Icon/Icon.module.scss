@@ -1,23 +1,25 @@
 .icon-styles {
   display: none;
 
-  &[data-color='primary'] + svg {
+  &[data-color="primary"] + svg {
     color: var(--text-primary);
   }
 
-  &[data-color='secondary'] + svg {
+  &[data-color="secondary"] + svg {
     color: var(--text-secondary);
   }
 
-  &[data-color='accent'] + svg {
+  &[data-color="accent"] + svg {
     color: var(--text-accent);
   }
 
-  &.stroke + svg * {
-    stroke: currentColor;
-  }
+  &:not([data-color="default"]) {
+    &.stroke + svg * {
+      stroke: currentColor;
+    }
 
-  &.fill + svg * {
-    fill: currentColor;
+    &.fill + svg * {
+      fill: currentColor;
+    }
   }
 }

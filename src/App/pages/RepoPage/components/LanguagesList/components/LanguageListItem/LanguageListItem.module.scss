@@ -1,0 +1,16 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+
+  .marker {
+    flex-shrink: 0;
+    width: 8px;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+  }
+
+  span {
+    color: var(--text-primary);
+  }
+}

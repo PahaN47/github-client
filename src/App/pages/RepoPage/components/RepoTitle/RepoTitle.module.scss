@@ -1,0 +1,22 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-m);
+  padding-bottom: var(--space-m);
+
+  .back {
+    color: var(--text-accent);
+    transition: all var(--button-transition-duration);
+
+    &:hover {
+      color: var(--text-secondary);
+    }
+  }
+
+  .avatar {
+    width: 40px;
+    aspect-ratio: 1 / 1;
+    border-radius: var(--border-radius);
+    object-fit: cover;
+  }
+}

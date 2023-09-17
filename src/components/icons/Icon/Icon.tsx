@@ -4,7 +4,7 @@ import cn from './Icon.module.scss';
 
 export type IconProps = React.SVGAttributes<SVGElement> & {
   className?: string;
-  color?: 'primary' | 'secondary' | 'accent';
+  color?: 'primary' | 'secondary' | 'accent' | 'default';
 };
 
 export type IconWrapProps = Pick<IconProps, 'color' | 'children'> & {

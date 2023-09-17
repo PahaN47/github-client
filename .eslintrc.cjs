@@ -25,12 +25,14 @@ module.exports = {
     'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
-    'plugin:mobx-recommended',
+    'plugin:mobx/recommended',
   ],
+  parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint', 'import', 'prettier', 'react', 'react-hooks', 'mobx'],
   rules: {
     'no-console': 'warn',
     'react/prop-types': 'off',
+    'react/self-closing-comp': 'error',
     'import/no-named-as-default-member': 'off',
     'import/order': [
       'error',
@@ -48,6 +50,7 @@ module.exports = {
         ],
       },
     ],
+    'mobx/missing-observer': 'off',
   },
   settings: {
     'import/parsers': {
