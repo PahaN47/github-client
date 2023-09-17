@@ -1,63 +1,60 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Button from 'components/Button';
+import Dropdown, { Option } from 'components/Dropdown';
 import Input from 'components/Input';
-import MultiDropdown, { Option } from 'components/MultiDropdown';
 import SearchIcon from 'components/icons/SearchIcon';
+import repoTypeOptions from 'config/repoTypeOptions';
+import { RepoType } from 'store/RepoListStore';
+import getOptionValues from 'utils/getOptionValues';
 import cn from './Filters.module.scss';
 
-export type FilterValues = { org: string; types: Option[] };
+export type FilterValues = { org: string; types: Option<RepoType>[] };
 
 export type FiltersProps = {
-  value: FilterValues;
-  onChange: (value: FilterValues) => void;
+  initialOrg: string;
+  initialTypes: Option<RepoType>[];
   onSearch: (value: FilterValues) => void;
   loading?: boolean;
 };
 
-const Filters: React.FC<FiltersProps> = ({ value, onChange, onSearch, loading }) => {
-  const getDropdownTitle = useCallback(() => 'Type', []);
+const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, loading }) => {
+  const [org, setOrg] = useState<string>(initialOrg);
+  const [types, setTypes] = useState<Option<RepoType>[]>(initialTypes);
+  const options = useMemo(() => repoTypeOptions.order.map((key) => repoTypeOptions.entities[key]), []);
 
-  const handleTypesChange = useCallback(
-    (types: Option[]) => {
-      onChange({ ...value, types });
-    },
-    [onChange, value],
-  );
-
-  const handleOrgChange = useCallback(
-    (org: string) => {
-      onChange({ ...value, org });
-    },
-    [onChange, value],
+  const getDropdownTitle = useCallback(
+    (types: Option<RepoType>[]) => (types.length ? getOptionValues(types).join(', ') : 'Type'),
+    [],
   );
 
   const handleSearchClick = useCallback(() => {
-    onSearch(value);
-  }, [onSearch, value]);
+    onSearch({ org, types });
+  }, [onSearch, org, types]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
       if (e.key.toLowerCase() === 'enter') {
-        onSearch(value);
+        onSearch({ org, types });
       }
     },
-    [onSearch, value],
+    [onSearch, org, types],
   );
 
   return (
     <div className={cn['wrap']}>
-      <MultiDropdown
+      <Dropdown
         className={cn['dropdown']}
-        options={[]}
-        value={value.types}
+        type="multi"
+        options={options}
+        value={types}
         getTitle={getDropdownTitle}
-        onChange={handleTypesChange}
+        onChange={setTypes}
       />
       <div className={cn['search']}>
         <Input
           className={cn['search-input']}
-          value={value.org}
-          onChange={handleOrgChange}
+          value={org}
+          onChange={setOrg}
           placeholder="Enter organization name"
           onKeyDown={handleKeyDown}
         />

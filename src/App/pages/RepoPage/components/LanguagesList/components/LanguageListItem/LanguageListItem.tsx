@@ -1,10 +1,10 @@
 import classNames from 'classnames';
 import React from 'react';
 import Text from 'components/Text';
-import { Language } from 'store/CurrentRepoStore';
+import { LanguageModel } from 'store/models/CurrentRepoStore';
 import cn from './LanguageListItem.module.scss';
 
-export type LanguageListItemProps = Language & {
+export type LanguageListItemProps = LanguageModel & {
   className?: string;
 };
 

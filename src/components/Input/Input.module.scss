@@ -41,5 +41,6 @@
     right: var(--space-xs);
     display: flex;
     transform: translateY(-50%);
+    pointer-events: none;
   }
 }

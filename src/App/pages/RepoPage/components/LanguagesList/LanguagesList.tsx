@@ -1,13 +1,14 @@
 import classNames from 'classnames';
 import React from 'react';
 import Text from 'components/Text';
-import { Language } from 'store/CurrentRepoStore';
+import { LanguageModel } from 'store/models/CurrentRepoStore';
+import { Collection } from 'store/models/shared';
 import LanguageListItem from './components/LanguageListItem';
 import cn from './LanguagesList.module.scss';
 
 export type LanguagesListProps = {
   className?: string;
-  list: Language[];
+  list: Collection<string, LanguageModel>;
 };
 
 const LanguagesList: React.FC<LanguagesListProps> = ({ className, list }) => {
@@ -17,20 +18,20 @@ const LanguagesList: React.FC<LanguagesListProps> = ({ className, list }) => {
         Languages
       </Text>
       <div className={cn['bar']}>
-        {list.map(({ name, value, color }) => (
+        {list.order.map((name) => (
           <div
             key={name}
             className={cn['bar-section']}
             style={{
-              width: value,
-              background: color,
+              width: list.entities[name].value,
+              background: list.entities[name].color,
             }}
           />
         ))}
       </div>
       <div className={cn['list']}>
-        {list.map((item) => (
-          <LanguageListItem key={item.name} {...item} />
+        {list.order.map((name) => (
+          <LanguageListItem key={name} {...list.entities[name]} />
         ))}
       </div>
     </div>

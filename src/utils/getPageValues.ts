@@ -1,4 +1,4 @@
-const getPageValues = (page: number, pageCount: number) => {
+export const getPageValues = (page: number, pageCount: number) => {
   const valueArray: { value: number; hideValue?: boolean }[] = new Array(pageCount)
     .fill(0)
     .map((_, index) => ({ value: index + 1 }));
@@ -22,5 +22,3 @@ const getPageValues = (page: number, pageCount: number) => {
         (page === pageCount && value === pageCount - 2),
     );
 };
-
-export default getPageValues;

@@ -1,11 +1,13 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
-import { useStore } from 'store/store';
+import CurrentRepoStore from 'store/CurrentRepoStore';
 import { FetchStatus } from 'store/types';
+import { useLocalStore } from 'utils/hooks';
+import { useInitialAction } from 'utils/hooks/useInitialAction';
 import ContributorsList from './components/ContributorsList';
 import LanguagesList from './components/LanguagesList';
 import RepoHomeLink from './components/RepoHomeLink';
@@ -15,30 +17,26 @@ import TopicList from './components/TopicList';
 import cn from './RepoPage.module.scss';
 
 const RepoPage: React.FC = () => {
-  const { currentRepo, currentRepoStatus, getCurrentRepo, resetCurrentRepo } = useStore((store) => store.currentRepo);
+  const { currentRepo, currentRepoStatus, getCurrentRepo } = useLocalStore(() => new CurrentRepoStore());
 
   const loading = currentRepoStatus === FetchStatus.PENDGING;
   const { owner, name } = useParams();
 
-  useEffect(() => () => resetCurrentRepo(), [resetCurrentRepo]);
-
-  useEffect(() => {
-    if (currentRepoStatus === FetchStatus.IDLE) {
-      getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
-    }
-  }, [currentRepo, currentRepoStatus, getCurrentRepo, name, owner]);
+  useInitialAction(() => {
+    getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
+  });
 
   return (
     <PageLayout className={cn['page']} background="secondary">
       {!loading && currentRepo ? (
         <>
-          <RepoTitle avatar={currentRepo.owner.avatar_url} name={currentRepo.name} />
+          <RepoTitle avatar={currentRepo.owner.avatarUrl} name={currentRepo.name} />
           {currentRepo.homepage && <RepoHomeLink url={currentRepo.homepage} />}
           <TopicList topics={currentRepo.topics} />
           <RepoStats
-            stars={currentRepo.stargazers_count}
-            watching={currentRepo.watchers_count}
-            forks={currentRepo.forks_count}
+            stars={currentRepo.stargazersCount}
+            watching={currentRepo.watchersCount}
+            forks={currentRepo.forksCount}
           />
           <div className={cn['bottom-stats']}>
             <ContributorsList list={currentRepo.contributors} count={currentRepo.contributorsCount} />

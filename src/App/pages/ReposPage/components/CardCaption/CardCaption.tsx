@@ -7,15 +7,15 @@ import cn from './CardCaption.module.scss';
 export type CardCaptionProps = {
   className?: string;
   stargazersCount: number;
-  updatedAt: string;
+  updatedAt: Date;
 };
 
-const getCardCaption = (stargazersCount: number, updatedAt: string) => {
+const getCardCaption = (stargazersCount: number, updatedAt: Date) => {
   const dateUpdatedAt = new Date(updatedAt);
   return `\u00a0${stargazersCount}${'\u00a0'.repeat(7)}Updated ${
     dateUpdatedAt.getFullYear() === new Date().getFullYear()
-      ? format(new Date(updatedAt), 'dd MMM')
-      : format(new Date(updatedAt), 'dd MMM, y')
+      ? format(updatedAt, 'dd MMM')
+      : format(updatedAt, 'dd MMM, y')
   }`;
 };
 

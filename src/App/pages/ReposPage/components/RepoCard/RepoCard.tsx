@@ -9,7 +9,7 @@ export type RepoCardProps = {
   name: string;
   onClick: (name: string) => void;
   stargazersCount: number;
-  updatedAt: string;
+  updatedAt: Date;
 };
 
 const RepoCard: React.FC<RepoCardProps> = ({
