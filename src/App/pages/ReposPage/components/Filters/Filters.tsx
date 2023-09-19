@@ -12,14 +12,14 @@ export type FilterValues = { org: string; types: Option<RepoType>[] };
 
 export type FiltersProps = {
   initialOrg: string;
-  initialTypes: Option<RepoType>[];
+  initialTypes: RepoType[];
   onSearch: (value: FilterValues) => void;
   loading?: boolean;
 };
 
 const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, loading }) => {
   const [org, setOrg] = useState<string>(initialOrg);
-  const [types, setTypes] = useState<Option<RepoType>[]>(initialTypes);
+  const [types, setTypes] = useState<Option<RepoType>[]>(initialTypes.map((key) => repoTypeOptions.entities[key]));
   const options = useMemo(() => repoTypeOptions.order.map((key) => repoTypeOptions.entities[key]), []);
 
   const getDropdownTitle = useCallback(

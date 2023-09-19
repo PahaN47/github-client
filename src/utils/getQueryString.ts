@@ -1,4 +1,4 @@
 import * as qs from 'qs';
-import { QueryParams } from 'store/RootStore/QueryStore';
 
-export const getQueryString = <T extends QueryParams>(query: T | null) => qs.stringify(query, { indices: false });
+export const getQueryString = <T extends Record<string, unknown>>(query: T | null) =>
+  qs.stringify(query, { indices: false });

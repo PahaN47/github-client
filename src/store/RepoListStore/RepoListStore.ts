@@ -1,5 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { API_ENDPOINTS } from 'config/api';
+import FetchStatusStore from 'store/FetchStatusStore';
 import { RepoModel, RepoApi, normalizeRepo } from 'store/models/RepoListStore';
 import { Collection, expandCollection, getEmptyCollection, normalizeCollection } from 'store/models/shared';
 import { FetchStatus } from 'store/types';
@@ -10,26 +11,32 @@ import { AddReposProps, GetRepoListProps } from './RepoListStore.types';
 
 export interface IRepoListStore {
   repoList: Collection<number, RepoModel>;
-  repoListStatus: FetchStatus;
   pageLimit: number;
   repoCount: number;
+  isIdle: boolean;
+  isPending: boolean;
+  isFulfilled: boolean;
+  isRejected: boolean;
 }
 
 type PrivateFileds = '_repoList' | '_repoListStatus' | '_pageLimit' | '_repoCount' | '_lastPage';
 
 class RepoListStore implements IRepoListStore, ILocalStore {
   private _repoList: Collection<number, RepoModel> = getEmptyCollection();
-  private _repoListStatus: FetchStatus = FetchStatus.IDLE;
+  private _repoListStatus: FetchStatusStore = new FetchStatusStore();
   private _pageLimit: number = 9;
   private _repoCount: number = 0;
   private _lastPage: number = 0;
 
-  constructor() {
-    makeObservable<RepoListStore, PrivateFileds>(this, {
-      addRepos: action,
+  constructor(props: GetRepoListProps) {
+    makeObservable<this, PrivateFileds>(this, {
+      isIdle: computed,
+      isPending: computed,
+      isFulfilled: computed,
+      isRejected: computed,
+      addRepos: action.bound,
       hasMore: computed,
       repoList: computed,
-      repoListStatus: computed,
       pageLimit: computed,
       repoCount: computed,
       _lastPage: observable,
@@ -37,19 +44,17 @@ class RepoListStore implements IRepoListStore, ILocalStore {
       _pageLimit: observable,
       _repoListStatus: observable,
       _repoList: observable.ref,
-      destroy: action,
-      getRepoList: action,
-      resetRepoList: action,
-      setPageLimit: action,
+      destroy: false,
+      getRepoList: action.bound,
+      resetRepoList: action.bound,
+      setPageLimit: action.bound,
     });
+
+    this.getRepoList(props);
   }
 
   get repoList() {
     return this._repoList;
-  }
-
-  get repoListStatus() {
-    return this._repoListStatus;
   }
 
   get pageLimit() {
@@ -64,8 +69,24 @@ class RepoListStore implements IRepoListStore, ILocalStore {
     return this._repoCount <= this.repoList.order.length;
   }
 
-  getRepoList = ({ org, page, types }: GetRepoListProps) => {
-    this._repoListStatus = FetchStatus.PENDGING;
+  get isIdle() {
+    return this._repoListStatus.isIdle;
+  }
+
+  get isPending() {
+    return this._repoListStatus.isPending;
+  }
+
+  get isFulfilled() {
+    return this._repoListStatus.isFulfilled;
+  }
+
+  get isRejected() {
+    return this._repoListStatus.isRejected;
+  }
+
+  getRepoList({ org, page, types }: GetRepoListProps) {
+    this._repoListStatus.setStatus(FetchStatus.PENDGING);
 
     const requestRepoList = axiosInstance
       .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
@@ -92,7 +113,7 @@ class RepoListStore implements IRepoListStore, ILocalStore {
         runInAction(() => {
           this._repoList = normalizeCollection(repoList, 'id');
           this._repoCount = repoCount;
-          this._repoListStatus = FetchStatus.FULFILLED;
+          this._repoListStatus.setStatus(FetchStatus.FULFILLED);
           this._lastPage = 1;
         });
       })
@@ -100,13 +121,13 @@ class RepoListStore implements IRepoListStore, ILocalStore {
         runInAction(() => {
           this._repoList = getEmptyCollection();
           this._repoCount = 0;
-          this._repoListStatus = FetchStatus.REJECTED;
+          this._repoListStatus.setStatus(FetchStatus.REJECTED);
           this._lastPage = 0;
         });
       });
-  };
+  }
 
-  addRepos = ({ org, types }: AddReposProps) => {
+  addRepos({ org, types }: AddReposProps) {
     const requestRepoList = axiosInstance
       .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
         params: {
@@ -132,27 +153,27 @@ class RepoListStore implements IRepoListStore, ILocalStore {
         runInAction(() => {
           this._repoList = expandCollection(this._repoList, repoList, 'id');
           this._repoCount = repoCount;
-          this._repoListStatus = FetchStatus.FULFILLED;
+          this._repoListStatus.setStatus(FetchStatus.FULFILLED);
           this._lastPage++;
         });
       })
       .catch(() => {
         runInAction(() => {
-          this._repoListStatus = FetchStatus.REJECTED;
+          this._repoListStatus.setStatus(FetchStatus.REJECTED);
           this._lastPage = 0;
         });
       });
-  };
+  }
 
-  resetRepoList = () => {
+  resetRepoList() {
     this._repoList = getEmptyCollection();
-    this._repoListStatus = FetchStatus.IDLE;
+    this._repoListStatus.setStatus(FetchStatus.IDLE);
     this._repoCount = 0;
-  };
+  }
 
-  setPageLimit = (n: number) => {
+  setPageLimit(n: number) {
     this._pageLimit = n;
-  };
+  }
 
   destroy = () => undefined;
 }

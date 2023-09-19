@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react';
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useQueryStoreInit } from 'store/RootStore/QueryStore';
@@ -15,4 +16,4 @@ function App() {
   );
 }
 
-export default App;
+export default observer(App);

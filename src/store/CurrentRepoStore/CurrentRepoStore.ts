@@ -1,5 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { API_ENDPOINTS } from 'config/api';
+import FetchStatusStore from 'store/FetchStatusStore';
 import {
   ContributorApi,
   ContributorModel,
@@ -21,37 +22,57 @@ import { GetCurrentRepoProps } from './CurrentRepoStore.types';
 
 export interface ICurrentRepoStore {
   currentRepo?: CurrentRepoModel;
-  currentRepoStatus: FetchStatus;
+  isIdle: boolean;
+  isPending: boolean;
+  isFulfilled: boolean;
+  isRejected: boolean;
 }
 
 type PrivateFields = '_currentRepo' | '_currentRepoStatus';
 
 class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
   private _currentRepo?: CurrentRepoModel = undefined;
-  private _currentRepoStatus: FetchStatus = FetchStatus.IDLE;
+  private _currentRepoStatus: FetchStatusStore = new FetchStatusStore();
 
-  constructor() {
+  constructor(props: GetCurrentRepoProps) {
     makeObservable<CurrentRepoStore, PrivateFields>(this, {
-      destroy: action,
+      isFulfilled: computed,
+      isRejected: computed,
+      isPending: computed,
+      isIdle: computed,
+      destroy: false,
       _currentRepoStatus: observable,
       _currentRepo: observable.ref,
       currentRepo: computed,
-      currentRepoStatus: computed,
-      getCurrentRepo: action,
-      resetCurrentRepo: action,
+      getCurrentRepo: false,
+      resetCurrentRepo: action.bound,
     });
+
+    this.getCurrentRepo(props);
   }
 
   get currentRepo() {
     return this._currentRepo;
   }
 
-  get currentRepoStatus() {
-    return this._currentRepoStatus;
+  get isIdle() {
+    return this._currentRepoStatus.isIdle;
+  }
+
+  get isPending() {
+    return this._currentRepoStatus.isPending;
+  }
+
+  get isFulfilled() {
+    return this._currentRepoStatus.isFulfilled;
+  }
+
+  get isRejected() {
+    return this._currentRepoStatus.isRejected;
   }
 
   getCurrentRepo = async ({ owner, name }: GetCurrentRepoProps) => {
-    this._currentRepoStatus = FetchStatus.PENDGING;
+    runInAction(() => this._currentRepoStatus.setStatus(FetchStatus.PENDGING));
 
     try {
       const currentRepo = await axiosInstance
@@ -105,25 +126,27 @@ class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
           runInAction(() => {
             if (repo) {
               this._currentRepo = repo;
-              this._currentRepoStatus = FetchStatus.FULFILLED;
+              this._currentRepoStatus.setStatus(FetchStatus.FULFILLED);
             }
           });
         });
     } catch {
       runInAction(() => {
         this._currentRepo = undefined;
-        this._currentRepoStatus = FetchStatus.REJECTED;
+        this._currentRepoStatus.setStatus(FetchStatus.REJECTED);
       });
       return;
     }
   };
 
-  resetCurrentRepo = () => {
+  resetCurrentRepo() {
     this._currentRepo = undefined;
-    this._currentRepoStatus = FetchStatus.IDLE;
-  };
+    this._currentRepoStatus.setStatus(FetchStatus.IDLE);
+  }
 
-  destroy = () => undefined;
+  destroy() {
+    return;
+  }
 }
 
 export default CurrentRepoStore;

@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import { useLocation } from 'react-router-dom';
-import { RootStoreContext } from 'store/RootStore';
+import rootStore from 'store/RootStore';
 
 export const useQueryStoreInit = () => {
   const { search } = useLocation();
-  const { setQueryString } = useContext(RootStoreContext).query;
+  const queryStore = rootStore.query;
 
-  setQueryString(search);
+  queryStore.setQueryString(search);
 };

@@ -1,5 +1,5 @@
-import QueryStore, { QueryParams } from './QueryStore';
+import QueryStore from './QueryStore';
 
 export default class RootStore {
-  readonly query: QueryStore<QueryParams> = new QueryStore();
+  readonly query: QueryStore = new QueryStore();
 }

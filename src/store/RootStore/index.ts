@@ -1,4 +1,3 @@
 import RootStore from './RootStore';
-export { default } from './provider';
-export * from './provider';
+export { default } from './instance';
 export { RootStore };

@@ -11,7 +11,9 @@ export const useLocalStore = <T extends ILocalStore>(init: () => T): T => {
     store.current = init();
   }
 
-  useEffect(() => () => store.current?.destroy(), []);
+  useEffect(() => {
+    return () => store.current?.destroy();
+  }, []);
 
   return store.current;
 };
