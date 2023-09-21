@@ -1,4 +1,4 @@
-import { Collection, getEmptyCollection } from 'store/models/shared';
+import CollectionStore from 'store/CollectionStore';
 import { RepoOwnerApi, RepoOwnerModel, normalizeRepoOwner } from '../RepoListStore';
 import { ContributorModel } from './contributor';
 import { LanguageModel } from './language';
@@ -35,9 +35,9 @@ export type CurrentRepoModel = {
   topics: string[];
   contributorsUrl: string;
   languagesUrl: string;
-  contributors: Collection<number, ContributorModel>;
+  contributors: CollectionStore<number, ContributorModel>;
   contributorsCount: number;
-  languages: Collection<string, LanguageModel>;
+  languages: CollectionStore<string, LanguageModel>;
   readme: string;
 };
 
@@ -56,8 +56,8 @@ export const normalizeCurrentRepo = (from: CurrentRepoApi): CurrentRepoModel => 
   topics: from.topics,
   contributorsUrl: from.contributors_url,
   languagesUrl: from.languages_url,
-  contributors: getEmptyCollection<number, ContributorModel>(),
+  contributors: new CollectionStore<number, ContributorModel>([], 'id'),
   contributorsCount: 0,
-  languages: getEmptyCollection<string, LanguageModel>(),
+  languages: new CollectionStore<string, LanguageModel>([], 'name'),
   readme: '',
 });

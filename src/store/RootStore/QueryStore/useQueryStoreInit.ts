@@ -1,9 +1,12 @@
+import { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import rootStore from 'store/RootStore';
+import { RootStoreContext } from 'store/RootStore';
 
 export const useQueryStoreInit = () => {
+  const queryStore = useContext(RootStoreContext).query;
   const { search } = useLocation();
-  const queryStore = rootStore.query;
 
-  queryStore.setQueryString(search);
+  useEffect(() => {
+    queryStore.setQueryString(search);
+  }, [search]);
 };

@@ -14,7 +14,7 @@ class CurrentRepoStore implements IFetchStatusStore {
 
   constructor() {
     makeObservable<this, PrivateFields>(this, {
-      setStatus: action.bound,
+      set: action.bound,
       _status: observable,
       isIdle: computed,
       isPending: computed,
@@ -36,7 +36,7 @@ class CurrentRepoStore implements IFetchStatusStore {
     return this._status === FetchStatus.REJECTED;
   }
 
-  setStatus(status: FetchStatus) {
+  set(status: FetchStatus) {
     this._status = status;
   }
 }

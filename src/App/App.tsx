@@ -1,4 +1,3 @@
-import { observer } from 'mobx-react';
 import React from 'react';
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { useQueryStoreInit } from 'store/RootStore/QueryStore';
@@ -10,10 +9,11 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Navigate to="/repos/ktsstudio" />} />
+      <Route path="/repos" element={<Navigate to="/repos/ktsstudio" />} />
       <Route path="/repos/:owner" element={<ReposPage />} />
       <Route path="/repos/:owner/:name" element={<RepoPage />} />
     </Routes>
   );
 }
 
-export default observer(App);
+export default App;

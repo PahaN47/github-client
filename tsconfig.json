@@ -24,6 +24,7 @@
       "assets": ["assets/*"],
       "components": ["components/*"],
       "config": ["config/*"],
+      "router": ["router"],
       "store": ["store/*"],
       "styles": ["styles/*"],
       "utils": ["utils/*"]

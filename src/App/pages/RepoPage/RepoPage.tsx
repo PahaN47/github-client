@@ -19,7 +19,7 @@ const RepoPage: React.FC = () => {
 
   const currentRepoStore = useLocalStore(() => new CurrentRepoStore({ owner: owner ?? '', name: name ?? '' }));
 
-  const loading = currentRepoStore.isPending;
+  const loading = currentRepoStore.status.isPending;
 
   return (
     <PageLayout className={cn['page']} background="secondary">
