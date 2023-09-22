@@ -1,5 +1,6 @@
-import React, { createContext, useRef } from 'react';
+import React, { createContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import { useLocalStore } from 'utils/hooks';
 import RootStore from './RootStore';
 
 export const RootStoreContext = createContext<RootStore>(null as unknown as RootStore);
@@ -7,12 +8,9 @@ export const RootStoreContext = createContext<RootStore>(null as unknown as Root
 const RootStoreProvider = ({ children }: React.PropsWithChildren) => {
   const { search } = useLocation();
 
-  const newStoreRef = useRef<RootStore | null>(null);
-  if (!newStoreRef.current) {
-    newStoreRef.current = new RootStore({ queryStoreProps: { initialQs: search } });
-  }
+  const rootStore = useLocalStore(() => new RootStore({ queryStoreProps: { initialQs: search } }));
 
-  return <RootStoreContext.Provider value={newStoreRef.current}>{children}</RootStoreContext.Provider>;
+  return <RootStoreContext.Provider value={rootStore}>{children}</RootStoreContext.Provider>;
 };
 
 export default RootStoreProvider;
