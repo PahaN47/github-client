@@ -1,13 +1,14 @@
 import classNames from 'classnames';
 import React from 'react';
 import Text from 'components/Text';
-import { Contributor } from 'store/CurrentRepoStore';
+import { ContributorModel } from 'store/models/CurrentRepoStore';
+import { Collection } from 'store/models/shared';
 import ContributorItem from './components/ContributorItem';
 import cn from './ContributorsList.module.scss';
 
 export type ContributorsListProps = {
   className?: string;
-  list: Contributor[];
+  list: Collection<number, ContributorModel>;
   count: number;
 };
 
@@ -19,8 +20,8 @@ const ContributorsList: React.FC<ContributorsListProps> = ({ className, list, co
         <span className={cn['tag']} data-count={count} />
       </Text>
     </div>
-    {list.map(({ id, avatar_url, login, name }) => (
-      <ContributorItem key={id} avatarUrl={avatar_url} login={login} name={name} />
+    {list.order.map((id) => (
+      <ContributorItem key={id} {...list.entities[id]} />
     ))}
   </div>
 );

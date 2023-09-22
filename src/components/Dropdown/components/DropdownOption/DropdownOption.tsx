@@ -1,24 +1,24 @@
 import classNames from 'classnames';
 import React, { useCallback } from 'react';
-import { Option } from 'components/MultiDropdown';
+import { Option } from 'components/Dropdown';
 import Text from 'components/Text';
-import cn from './MultiDropdownOption.module.scss';
+import cn from './DropdownOption.module.scss';
 
-export type MultiDropDownOptionProps = {
+export type DropDownOptionProps<T extends string> = {
   className?: string;
-  value: Option;
-  onSelect: (value: Option) => void;
-  onDeselect?: (value: Option) => void;
+  value: Option<T>;
+  onSelect: (value: Option<T>) => void;
+  onDeselect?: (value: Option<T>) => void;
   selected?: boolean;
 };
 
-const MultiDropDownOption: React.FC<MultiDropDownOptionProps> = ({
+const DropDownOption = <T extends string>({
   className,
   value,
   onSelect,
   onDeselect,
   selected,
-}) => {
+}: DropDownOptionProps<T>) => {
   const handleClick = useCallback(() => {
     if (selected && onDeselect) {
       onDeselect(value);
@@ -36,4 +36,4 @@ const MultiDropDownOption: React.FC<MultiDropDownOptionProps> = ({
   );
 };
 
-export default MultiDropDownOption;
+export default DropDownOption;

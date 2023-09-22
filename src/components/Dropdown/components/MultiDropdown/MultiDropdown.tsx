@@ -1,33 +1,28 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo, useState } from 'react';
+import { Option } from 'components/Dropdown';
+import cn from 'components/Dropdown/Dropdown.module.scss';
 import Input from 'components/Input';
 import ArrowDownIcon from 'components/icons/ArrowDownIcon/ArrowDownIcon';
-import MultiDropdownOption from './components/MultiDropdownOption';
-import cn from './MultiDropdown.module.scss';
+import DropdownOption from '../DropdownOption';
 
-export type Option = {
-  /** Ключ варианта, используется для отправки на бек/использования в коде */
-  key: string;
-  /** Значение варианта, отображается пользователю */
-  value: string;
-};
-
-/** Пропсы, которые принимает компонент Dropdown */
-export type MultiDropdownProps = {
+export type MultiDropdownProps<T extends string> = {
   className?: string;
-  /** Массив возможных вариантов для выбора */
-  options: Option[];
-  /** Текущие выбранные значения поля, может быть пустым */
-  value: Option[];
-  /** Callback, вызываемый при выборе варианта */
-  onChange: (value: Option[]) => void;
-  /** Заблокирован ли дропдаун */
+  options: Option<T>[];
+  value: Option<T>[];
+  onChange: (value: Option<T>[]) => void;
   disabled?: boolean;
-  /** Возвращает строку которая будет выводится в инпуте. В случае если опции не выбраны, строка должна отображаться как placeholder. */
-  getTitle: (value: Option[]) => string;
+  getTitle: (value: Option<T>[]) => string;
 };
 
-const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value, onChange, disabled, getTitle }) => {
+const MultiDropdown = <T extends string>({
+  className,
+  options,
+  value,
+  onChange,
+  disabled,
+  getTitle,
+}: MultiDropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const title = getTitle(value);
   const [inputValue, setInputValue] = useState(value.length ? title : '');
@@ -65,14 +60,14 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
   );
 
   const handleItemSelect = useCallback(
-    (item: Option) => {
+    (item: Option<T>) => {
       onChange([...value, item]);
     },
     [onChange, value],
   );
 
   const handleItemDeselect = useCallback(
-    (item: Option) => {
+    (item: Option<T>) => {
       onChange(value.filter((selectedItem) => selectedItem.key !== item.key));
     },
     [onChange, value],
@@ -91,7 +86,7 @@ const MultiDropdown: React.FC<MultiDropdownProps> = ({ className, options, value
       {!disabled && isOpen && (
         <div className={cn['options']}>
           {filteredOptions.map(({ selected, ...value }) => (
-            <MultiDropdownOption
+            <DropdownOption
               key={value.key}
               value={value}
               onSelect={handleItemSelect}

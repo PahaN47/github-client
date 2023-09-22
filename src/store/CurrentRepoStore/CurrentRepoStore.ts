@@ -1,103 +1,124 @@
-import { Base64 } from 'js-base64';
-import { action, makeObservable, observable, runInAction } from 'mobx';
+import { action, computed, makeObservable, observable, runInAction } from 'mobx';
 import { API_ENDPOINTS } from 'config/api';
+import FetchStatusStore from 'store/FetchStatusStore';
+import {
+  ContributorApi,
+  CurrentRepoApi,
+  CurrentRepoModel,
+  LanguagesApi,
+  normalizeContributor,
+  normalizeCurrentRepo,
+  normalizeLanguages,
+  normalizeReadme,
+  ReadmeApi,
+} from 'store/models/CurrentRepoStore';
 import { FetchStatus } from 'store/types';
-import axiosInstance from 'utils/axios';
-import getParsedLanguages from 'utils/getParsedLanguages';
-import { Contributor, CurrentRepo, GetCurrentRepoProps, Readme } from './CurrentRepoStore.types';
+import { axiosInstance } from 'utils/axios';
+import { getResponseItemCount } from 'utils/getResponseItemCount';
+import { ILocalStore } from 'utils/hooks/useLocalStore';
+import { GetCurrentRepoProps } from './CurrentRepoStore.types';
 
-export interface CurrentRepoStoreType {
-  currentRepo?: CurrentRepo;
-  currentRepoStatus: FetchStatus;
+export interface ICurrentRepoStore {
+  currentRepo?: CurrentRepoModel;
 }
 
-export const currentRepoStoreInitialValue: CurrentRepoStoreType = {
-  currentRepoStatus: FetchStatus.IDLE,
-};
+type PrivateFields = '_currentRepo';
 
-class CurrentRepoStore implements CurrentRepoStoreType {
-  currentRepo?: CurrentRepo;
-  currentRepoStatus: FetchStatus;
+class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
+  private _currentRepo?: CurrentRepoModel = undefined;
+  status: FetchStatusStore = new FetchStatusStore();
 
-  constructor({ currentRepoStatus }: CurrentRepoStoreType) {
-    this.currentRepoStatus = currentRepoStatus;
-
-    makeObservable(this, {
-      currentRepo: observable,
-      currentRepoStatus: observable,
-      setCurrentRepo: action,
-      setCurrentRepoStatus: action,
-      getCurrentRepo: action,
-      resetCurrentRepo: action,
+  constructor(props: GetCurrentRepoProps) {
+    makeObservable<CurrentRepoStore, PrivateFields>(this, {
+      destroy: false,
+      status: observable,
+      _currentRepo: observable.ref,
+      currentRepo: computed,
+      getCurrentRepo: false,
+      resetCurrentRepo: action.bound,
     });
+
+    this.getCurrentRepo(props);
   }
 
-  setCurrentRepo = (repo?: CurrentRepo) => {
-    this.currentRepo = repo;
-  };
-
-  setCurrentRepoStatus = (status: FetchStatus) => {
-    this.currentRepoStatus = status;
-  };
+  get currentRepo() {
+    return this._currentRepo;
+  }
 
   getCurrentRepo = async ({ owner, name }: GetCurrentRepoProps) => {
-    this.setCurrentRepoStatus(FetchStatus.PENDGING);
+    runInAction(() => this.status.set(FetchStatus.PENDGING));
 
     try {
-      const currentRepo = (await axiosInstance.get<CurrentRepo>(API_ENDPOINTS.REPO(owner, name).index)).data;
+      const currentRepo = await axiosInstance
+        .get<CurrentRepoApi>(API_ENDPOINTS.REPO(owner, name).index)
+        .then(({ data }) => normalizeCurrentRepo(data));
 
       const requestLanguages = axiosInstance
-        .get<Record<string, number>>(currentRepo.languages_url)
-        .then(({ data }) => getParsedLanguages(data));
+        .get<LanguagesApi>(currentRepo.languagesUrl)
+        .then(({ data }) => normalizeLanguages(data));
 
       const requestContributorsCount = axiosInstance
-        .get<Contributor[]>(currentRepo.contributors_url, {
+        .get<ContributorApi[]>(currentRepo.contributorsUrl, {
           params: { page: 1, per_page: 1 },
         })
-        .then(({ headers, data }) => data.length && +[...headers.link.matchAll(/[^_]page=(\d+)/g)][1][1]);
+        .then((resp) => getResponseItemCount(resp));
 
       const requestContributors = axiosInstance
-        .get<Omit<Contributor[], 'name'>>(currentRepo.contributors_url, { params: { page: 1, per_page: 10 } })
-        .then(async ({ data }) => {
-          const contributorList: Contributor[] = await Promise.all(
-            data.map(({ login }) => axiosInstance.get<Contributor>(API_ENDPOINTS.USER(login))),
-          ).then((res) => res.map(({ data }) => data));
-
-          return contributorList;
-        });
+        .get<ContributorApi[]>(currentRepo.contributorsUrl, { params: { page: 1, per_page: 10 } })
+        .then(({ data }) =>
+          Promise.all(data.map(({ login }) => axiosInstance.get<ContributorApi>(API_ENDPOINTS.USER(login)))).then(
+            (res) => res.map(({ data }) => normalizeContributor(data)),
+          ),
+        );
 
       const requestReadme = axiosInstance
-        .get<Readme>(API_ENDPOINTS.REPO(owner, name).README)
-        .then(async ({ data }) => Base64.decode(data.content));
+        .get<ReadmeApi>(API_ENDPOINTS.REPO(owner, name).README)
+        .then(async ({ data }) => normalizeReadme(data));
 
-      await Promise.allSettled([requestLanguages, requestContributorsCount, requestContributors, requestReadme])
+      Promise.allSettled([requestLanguages, requestContributorsCount, requestContributors, requestReadme])
         .then(([languages, contributorsCount, contributors, readme]) => {
           runInAction(() => {
-            currentRepo.languages = languages.status === 'fulfilled' ? languages.value : [];
-            currentRepo.contributorsCount = contributorsCount.status === 'fulfilled' ? contributorsCount.value : 0;
-            currentRepo.contributors = contributors.status === 'fulfilled' ? contributors.value : [];
-            currentRepo.readme = readme.status === 'fulfilled' ? readme.value : undefined;
+            if (languages.status === 'fulfilled') {
+              currentRepo.languages.set(languages.value);
+            }
+            if (contributorsCount.status === 'fulfilled') {
+              currentRepo.contributorsCount = contributorsCount.value;
+            }
+            if (contributors.status === 'fulfilled') {
+              currentRepo.contributors.set(contributors.value);
+            }
+            if (readme.status === 'fulfilled') {
+              currentRepo.readme = readme.value;
+            }
           });
 
           return currentRepo;
         })
         .then((repo) => {
-          if (repo) {
-            this.setCurrentRepo(repo);
-            this.setCurrentRepoStatus(FetchStatus.FULFILLED);
-          }
+          runInAction(() => {
+            if (repo) {
+              this._currentRepo = repo;
+              this.status.set(FetchStatus.FULFILLED);
+            }
+          });
         });
     } catch {
-      this.setCurrentRepo(undefined);
-      this.setCurrentRepoStatus(FetchStatus.REJECTED);
+      runInAction(() => {
+        this._currentRepo = undefined;
+        this.status.set(FetchStatus.REJECTED);
+      });
       return;
     }
   };
 
-  resetCurrentRepo = () => {
-    this.currentRepo = undefined;
-    this.currentRepoStatus = FetchStatus.IDLE;
-  };
+  resetCurrentRepo() {
+    this._currentRepo = undefined;
+    this.status.set(FetchStatus.IDLE);
+  }
+
+  destroy() {
+    return;
+  }
 }
 
 export default CurrentRepoStore;

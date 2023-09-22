@@ -1,60 +1,52 @@
 import { observer } from 'mobx-react';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import React, { useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
 import Pagination from 'components/Pagination';
 import Text from 'components/Text';
-import { useStore } from 'store/store';
-import { FetchStatus } from 'store/types';
+import RepoListStore, { RepoType } from 'store/RepoListStore';
+import { arrayQuery, numberQuery, stringQuery } from 'store/models/QueryStore';
+import { getOptionKeys } from 'utils/getOptionKeys';
+import { getQueryString } from 'utils/getQueryString';
+import { useQuery } from 'utils/hooks';
+import { useLocalStore } from 'utils/hooks/useLocalStore';
 import Filters, { FilterValues } from './components/Filters';
 import RepoCard from './components/RepoCard';
 import cn from './ReposPage.module.scss';
 
+const repoPageQuery = {
+  page: numberQuery(1),
+  type: arrayQuery(stringQuery<RepoType>()),
+};
+
 const ReposPage: React.FC = () => {
-  const { repoList, getRepoList, repoListStatus, repoCount, pageLimit } = useStore((store) => store.repoList);
+  const [query, setQuery] = useQuery(repoPageQuery);
 
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
   const params = useParams();
 
-  const page = +(searchParams.get('page') ?? 1);
   const org = params.owner ?? '';
 
-  const [filters, setFilters] = useState<FilterValues>({ org, types: [] });
+  const repoListStore = useLocalStore(() => new RepoListStore({ org, page: query.page, types: query.type }));
 
-  const pageCount = Math.ceil(repoCount / pageLimit);
-  const loading = repoListStatus === FetchStatus.PENDGING;
+  const loading = repoListStore.status.isPending;
 
-  useEffect(() => {
-    if (repoListStatus === FetchStatus.IDLE) {
-      getRepoList({ org, page });
-      navigate(`/repos/${org}`);
-      setSearchParams({ page: page.toString() }, { replace: true });
-    }
-  }, [getRepoList, navigate, org, page, repoListStatus, setSearchParams]);
-
-  const handleSearch = useCallback(
-    ({ org }: FilterValues) => {
-      getRepoList({ org });
-      navigate(`/repos/${org}`);
-    },
-    [getRepoList, navigate],
-  );
+  const handleSearch = useCallback(({ org, types }: FilterValues) => {
+    const typeKeys = getOptionKeys(types);
+    repoListStore.getRepoList({ org, types: typeKeys });
+    navigate({
+      pathname: `/repos/${org}`,
+      search: getQueryString({ type: typeKeys }),
+    });
+  }, []);
 
   const handlePageChange = useCallback(
     (page: number) => {
-      getRepoList({ org, page });
-      setSearchParams({ page: page.toString() }, { replace: true });
+      repoListStore.getRepoList({ org, page, types: query.type });
+      setQuery({ page, type: query.type });
     },
-    [getRepoList, org, setSearchParams],
-  );
-
-  const handleCardClick = useCallback(
-    (name: string) => {
-      navigate(`/repos/${org}/${name}`, { relative: 'path' });
-    },
-    [navigate, org],
+    [org, query.type],
   );
 
   return (
@@ -67,29 +59,46 @@ const ReposPage: React.FC = () => {
           List repositories for specified organization
         </Text>
       </div>
-      <Filters value={filters} onChange={setFilters} onSearch={handleSearch} loading={loading} />
+      <Filters initialOrg={org} initialTypes={query.type} onSearch={handleSearch} loading={loading} />
 
       <div className={cn['repo-list']}>
-        {!loading ? (
+        {loading ? (
+          <div className={cn['no-content-wrap']}>
+            <Loader className={cn['loader']} size="l" />
+          </div>
+        ) : repoListStore.list.order.length ? (
           <>
             <div className={cn['repos']}>
-              {repoList.map(({ id, owner, stargazers_count, updated_at, name, description }) => (
-                <RepoCard
-                  key={id}
-                  className={cn['repo-card']}
-                  avatar={owner.avatar_url}
-                  name={name}
-                  description={description}
-                  onClick={handleCardClick}
-                  stargazersCount={stargazers_count}
-                  updatedAt={updated_at}
-                />
-              ))}
+              {repoListStore.list.order.map((id) => {
+                const { owner, name, description, stargazersCount, updatedAt } = repoListStore.list.entities[id];
+                return (
+                  <RepoCard
+                    key={id}
+                    link={`/repos/${org}/${name}`}
+                    avatar={owner.avatarUrl}
+                    name={name}
+                    description={description}
+                    stargazersCount={stargazersCount}
+                    updatedAt={updatedAt}
+                  />
+                );
+              })}
             </div>
-            <Pagination page={page} onChange={handlePageChange} pageCount={pageCount} />
+            <Pagination
+              page={repoListStore.pagination.page}
+              onChange={handlePageChange}
+              pageCount={repoListStore.pagination.pageCount}
+            />
           </>
         ) : (
-          <Loader className={cn['loader']} size="l" />
+          <div className={cn['no-content-wrap']}>
+            <Text view="p-20" weight="normal" color="primary">
+              Sorry, but nothing was found!
+            </Text>
+            <Text view="p-18" color="secondary">
+              Try adjusting your search
+            </Text>
+          </div>
         )}
       </div>
     </PageLayout>

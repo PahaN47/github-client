@@ -1,102 +1,129 @@
-import { action, makeObservable, observable } from 'mobx';
+import { makeObservable, observable, runInAction } from 'mobx';
 import { API_ENDPOINTS } from 'config/api';
+import CollectionStore from 'store/CollectionStore';
+import FetchStatusStore from 'store/FetchStatusStore';
+import PaginationStore from 'store/PaginationStore';
+import { RepoModel, RepoApi, normalizeRepo } from 'store/models/RepoListStore';
 import { FetchStatus } from 'store/types';
-import axiosInstance from 'utils/axios';
-import { GetRepoListProps, Repo, RepoOwner } from './RepoListStore.types';
+import { axiosInstance } from 'utils/axios';
+import { getResponseItemCount } from 'utils/getResponseItemCount';
+import { ILocalStore } from 'utils/hooks/useLocalStore';
+import { AddReposProps, GetRepoListProps } from './RepoListStore.types';
 
-export interface RepoListStoreType {
-  repoList: Repo[];
-  repoListStatus: FetchStatus;
-  pageLimit?: number;
-  repoCount?: number;
+export interface IRepoListStore {
+  list: CollectionStore<number, RepoModel>;
+  status: FetchStatusStore;
+  pagination: PaginationStore;
 }
 
-export const repoListStoreInitialValue: RepoListStoreType = {
-  repoList: [],
-  repoListStatus: FetchStatus.IDLE,
-  pageLimit: 9,
-  repoCount: 0,
-};
+class RepoListStore implements IRepoListStore, ILocalStore {
+  list: CollectionStore<number, RepoModel> = new CollectionStore<number, RepoModel>([], 'id');
+  status: FetchStatusStore = new FetchStatusStore();
+  pagination: PaginationStore = new PaginationStore(9);
 
-class RepoListStore implements RepoListStoreType {
-  repoList: Repo[];
-  repoListStatus: FetchStatus;
-  pageLimit: number;
-  repoCount: number;
-
-  constructor({ repoList, repoListStatus, pageLimit = 9, repoCount = 0 }: RepoListStoreType) {
-    this.repoList = repoList;
-    this.repoListStatus = repoListStatus;
-    this.pageLimit = pageLimit;
-    this.repoCount = repoCount;
-
+  constructor(props: GetRepoListProps) {
     makeObservable(this, {
-      repoList: observable,
-      repoListStatus: observable,
-      pageLimit: observable,
-      repoCount: observable,
-      setRepoList: action,
-      setRepoListStatus: action,
-      setRepoCount: action,
-      getRepoList: action,
-      resetRepoList: action,
-      setPageLimit: action,
+      pagination: observable,
+      addRepos: false,
+      list: observable,
+      status: observable,
+      destroy: false,
+      getRepoList: false,
+      resetRepoList: false,
     });
+
+    this.getRepoList(props);
   }
 
-  setRepoList = (repoList: Repo[]) => {
-    this.repoList = repoList;
-  };
+  getRepoList({ org, page = 1, types }: GetRepoListProps) {
+    this.status.set(FetchStatus.PENDGING);
+    this.pagination.setPage(page);
 
-  setRepoListStatus = (status: FetchStatus) => {
-    this.repoListStatus = status;
-  };
+    const requestRepoList = axiosInstance
+      .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
+        params: {
+          page,
+          per_page: this.pagination.pageLimit,
+          type: types,
+        },
+      })
+      .then(({ data }) => data.map((repo) => normalizeRepo(repo)));
 
-  setRepoCount = (repoCount: number) => {
-    this.repoCount = repoCount;
-  };
+    const requestRepoCount = axiosInstance
+      .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
+        params: {
+          page: 1,
+          per_page: 1,
+          type: types,
+        },
+      })
+      .then((resp) => getResponseItemCount(resp));
 
-  getRepoList = ({ org, page }: GetRepoListProps) => {
-    this.setRepoListStatus(FetchStatus.PENDGING);
-
-    const requestRepoList = axiosInstance.get<Repo[]>(API_ENDPOINTS.ORG(org).REPOS, {
-      params: {
-        page,
-        per_page: this.pageLimit,
-      },
-    });
-
-    requestRepoList
-      .then(({ data }) => {
-        if (this.repoList[0]?.owner?.login !== org) {
-          const requestRepoCount = axiosInstance.get<RepoOwner>(API_ENDPOINTS.ORG(org).index);
-
-          requestRepoCount
-            .then(({ data }) => {
-              this.setRepoCount(data.public_repos);
-            })
-            .catch((e) => {
-              throw e;
-            });
-        }
-        this.setRepoList(data);
-        this.setRepoListStatus(FetchStatus.FULFILLED);
+    Promise.all([requestRepoList, requestRepoCount])
+      .then(([repoList, repoCount]) => {
+        runInAction(() => {
+          this.list.set(repoList);
+          this.pagination.setItemCount(repoCount);
+          this.status.set(FetchStatus.FULFILLED);
+          this.pagination.setLastPage(1);
+        });
       })
       .catch(() => {
-        this.setRepoList([]);
-        this.setRepoCount(0);
-        this.setRepoListStatus(FetchStatus.REJECTED);
+        runInAction(() => {
+          this.list.set([]);
+          this.status.set(FetchStatus.REJECTED);
+          this.pagination.setLastPage(page);
+        });
       });
-  };
+  }
 
-  resetRepoList = () => {
-    this.repoList = [];
-    this.repoListStatus = FetchStatus.IDLE;
-  };
+  addRepos({ org, types }: AddReposProps) {
+    const requestRepoList = axiosInstance
+      .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
+        params: {
+          page: this.pagination.lastPage + 1,
+          per_page: this.pagination.pageLimit,
+          type: types,
+        },
+      })
+      .then(({ data }) => data.map((repo) => normalizeRepo(repo)));
 
-  setPageLimit = (n: number) => {
-    this.pageLimit = n;
-  };
+    const requestRepoCount = axiosInstance
+      .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
+        params: {
+          page: 1,
+          per_page: 1,
+          type: types,
+        },
+      })
+      .then((resp) => getResponseItemCount(resp));
+
+    Promise.all([requestRepoList, requestRepoCount])
+      .then(([repoList, repoCount]) => {
+        runInAction(() => {
+          this.list.expand(repoList);
+          this.pagination.setItemCount(repoCount);
+          this.status.set(FetchStatus.FULFILLED);
+          this.pagination.incrementLastPage();
+        });
+      })
+      .catch(() => {
+        runInAction(() => {
+          this.status.set(FetchStatus.REJECTED);
+          this.pagination.setLastPage(0);
+        });
+      });
+  }
+
+  resetRepoList() {
+    this.list.set([]);
+    this.status.set(FetchStatus.IDLE);
+    this.pagination.setItemCount(0);
+    this.pagination.setPage(1);
+    this.pagination.setLastPage(1);
+  }
+
+  destroy = () => undefined;
 }
 
 export default RepoListStore;

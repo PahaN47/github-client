@@ -1,10 +1,13 @@
+@import "styles/mixins";
+
 .page {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: var(--space-xxxl) var(--space-page);
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 
   .title {
     display: flex;
@@ -16,6 +19,7 @@
 
   .repo-list {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     align-items: center;
     gap: 41px;
@@ -34,11 +38,13 @@
       }
     }
 
-    .loader {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+    .no-content-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-s);
+      margin-top: 80px;
     }
   }
 }

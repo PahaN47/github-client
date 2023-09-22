@@ -1,11 +1,11 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
-import { useStore } from 'store/store';
-import { FetchStatus } from 'store/types';
+import CurrentRepoStore from 'store/CurrentRepoStore';
+import { useLocalStore } from 'utils/hooks';
 import ContributorsList from './components/ContributorsList';
 import LanguagesList from './components/LanguagesList';
 import RepoHomeLink from './components/RepoHomeLink';
@@ -15,40 +15,36 @@ import TopicList from './components/TopicList';
 import cn from './RepoPage.module.scss';
 
 const RepoPage: React.FC = () => {
-  const { currentRepo, currentRepoStatus, getCurrentRepo, resetCurrentRepo } = useStore((store) => store.currentRepo);
-
-  const loading = currentRepoStatus === FetchStatus.PENDGING;
   const { owner, name } = useParams();
 
-  useEffect(() => () => resetCurrentRepo(), [resetCurrentRepo]);
+  const currentRepoStore = useLocalStore(() => new CurrentRepoStore({ owner: owner ?? '', name: name ?? '' }));
 
-  useEffect(() => {
-    if (currentRepoStatus === FetchStatus.IDLE) {
-      getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
-    }
-  }, [currentRepo, currentRepoStatus, getCurrentRepo, name, owner]);
+  const loading = currentRepoStore.status.isPending;
 
   return (
     <PageLayout className={cn['page']} background="secondary">
-      {!loading && currentRepo ? (
+      {!loading && currentRepoStore.currentRepo ? (
         <>
-          <RepoTitle avatar={currentRepo.owner.avatar_url} name={currentRepo.name} />
-          {currentRepo.homepage && <RepoHomeLink url={currentRepo.homepage} />}
-          <TopicList topics={currentRepo.topics} />
+          <RepoTitle avatar={currentRepoStore.currentRepo.owner.avatarUrl} name={currentRepoStore.currentRepo.name} />
+          {currentRepoStore.currentRepo.homepage && <RepoHomeLink url={currentRepoStore.currentRepo.homepage} />}
+          <TopicList topics={currentRepoStore.currentRepo.topics} />
           <RepoStats
-            stars={currentRepo.stargazers_count}
-            watching={currentRepo.watchers_count}
-            forks={currentRepo.forks_count}
+            stars={currentRepoStore.currentRepo.stargazersCount}
+            watching={currentRepoStore.currentRepo.watchersCount}
+            forks={currentRepoStore.currentRepo.forksCount}
           />
           <div className={cn['bottom-stats']}>
-            <ContributorsList list={currentRepo.contributors} count={currentRepo.contributorsCount} />
-            <LanguagesList list={currentRepo.languages} />
+            <ContributorsList
+              list={currentRepoStore.currentRepo.contributors}
+              count={currentRepoStore.currentRepo.contributorsCount}
+            />
+            <LanguagesList list={currentRepoStore.currentRepo.languages} />
           </div>
-          {currentRepo.readme && (
+          {currentRepoStore.currentRepo.readme && (
             <div className={cn['readme-wrap']}>
               <div className={cn['readme-title']}>README.md</div>
               <div className={cn['readme-content']}>
-                <MarkdownPreview source={currentRepo.readme} />
+                <MarkdownPreview source={currentRepoStore.currentRepo.readme} />
               </div>
             </div>
           )}

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, { useCallback, useMemo } from 'react';
 import ArrowLeftIcon from 'components/icons/ArrowLeftIcon';
-import getPageValues from 'utils/getPageValues';
+import { getPageValues } from 'utils/getPageValues';
 import PageButton from './components/PageButton';
 import cn from './Pagination.module.scss';
 
