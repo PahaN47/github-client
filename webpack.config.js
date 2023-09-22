@@ -10,7 +10,7 @@ const srcPath = path.resolve(__dirname, 'src');
 const isDev = process.env.NODE_ENV === 'development';
 
 const styleSettings = (module = false) => [
-  MiniCssExtractPlugin.loader,
+  isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
   !module
     ? 'css-loader'
     : {
@@ -45,9 +45,10 @@ module.exports = {
       template: path.join(srcPath, 'index.html'),
     }),
     isDev && new ReactRefreshWebpackPlugin(),
-    new MiniCssExtractPlugin({
-      filename: '[name]-[contenthash].css',
-    }),
+    !isDev &&
+      new MiniCssExtractPlugin({
+        filename: '[name]-[contenthash].css',
+      }),
     new TsCheckerPlugin(),
     new Dotenv(),
   ].filter(Boolean),
