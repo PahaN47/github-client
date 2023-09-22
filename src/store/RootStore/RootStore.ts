@@ -12,7 +12,5 @@ export default class RootStore implements ILocalStore {
     this.query = new QueryStore(queryStoreProps);
   }
 
-  destroy() {
-    return;
-  }
+  destroy() {}
 }
