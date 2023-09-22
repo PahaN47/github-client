@@ -1,14 +1,17 @@
-import { makeObservable, observable, runInAction } from 'mobx';
+import { action, makeObservable, observable, runInAction } from 'mobx';
 import { API_ENDPOINTS } from 'config/api';
 import CollectionStore from 'store/CollectionStore';
 import FetchStatusStore from 'store/FetchStatusStore';
 import PaginationStore from 'store/PaginationStore';
+import QSConnector from 'store/QSConnector';
+import type QueryStore from 'store/RootStore/QueryStore';
+import { arrayQuery, numberQuery, stringQuery } from 'store/models/QueryStore';
 import { RepoModel, RepoApi, normalizeRepo } from 'store/models/RepoListStore';
 import { FetchStatus } from 'store/types';
 import { axiosInstance } from 'utils/axios';
 import { getResponseItemCount } from 'utils/getResponseItemCount';
 import { ILocalStore } from 'utils/hooks/useLocalStore';
-import { AddReposProps, GetRepoListProps } from './RepoListStore.types';
+import { AddReposProps, RepoType } from './RepoListStore.types';
 
 export interface IRepoListStore {
   list: CollectionStore<number, RepoModel>;
@@ -17,12 +20,22 @@ export interface IRepoListStore {
 }
 
 class RepoListStore implements IRepoListStore, ILocalStore {
-  list: CollectionStore<number, RepoModel> = new CollectionStore<number, RepoModel>([], 'id');
-  status: FetchStatusStore = new FetchStatusStore();
-  pagination: PaginationStore = new PaginationStore(9);
+  org: string;
+  types: RepoType[] = [];
 
-  constructor(props: GetRepoListProps) {
+  readonly list = new CollectionStore<number, RepoModel>([], 'id');
+  readonly status = new FetchStatusStore();
+  readonly pagination = new PaginationStore(9);
+
+  private readonly pageQP: QSConnector<number>;
+  private readonly typeQP: QSConnector<RepoType[]>;
+
+  constructor(org: string, queryStore: QueryStore) {
+    this.org = org;
+
     makeObservable(this, {
+      org: observable,
+      types: observable.ref,
       pagination: observable,
       addRepos: false,
       list: observable,
@@ -30,31 +43,55 @@ class RepoListStore implements IRepoListStore, ILocalStore {
       destroy: false,
       getRepoList: false,
       resetRepoList: false,
+      setTypes: action.bound,
+      setOrg: action.bound,
     });
 
-    this.getRepoList(props);
+    this.pageQP = new QSConnector(queryStore, {
+      name: 'page',
+      parser: numberQuery(1),
+      watchValue: () => this.pagination.page,
+    });
+    this.typeQP = new QSConnector(queryStore, {
+      name: 'type',
+      parser: arrayQuery(stringQuery<RepoType>()),
+      watchValue: () => this.types,
+    });
+
+    this.pagination.setPage(this.pageQP.value);
+    this.types = this.typeQP.value;
+
+    this.getRepoList();
   }
 
-  getRepoList({ org, page = 1, types }: GetRepoListProps) {
+  setTypes(types: RepoType[]) {
+    this.types = types;
+  }
+
+  setOrg(value: string) {
+    this.org = value;
+  }
+
+  getRepoList() {
     this.status.set(FetchStatus.PENDGING);
-    this.pagination.setPage(page);
+    this.pagination.setPage(this.pagination.page);
 
     const requestRepoList = axiosInstance
-      .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
+      .get<RepoApi[]>(API_ENDPOINTS.ORG(this.org).REPOS, {
         params: {
-          page,
+          page: this.pagination.page,
           per_page: this.pagination.pageLimit,
-          type: types,
+          type: this.types,
         },
       })
       .then(({ data }) => data.map((repo) => normalizeRepo(repo)));
 
     const requestRepoCount = axiosInstance
-      .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
+      .get<RepoApi[]>(API_ENDPOINTS.ORG(this.org).REPOS, {
         params: {
           page: 1,
           per_page: 1,
-          type: types,
+          type: this.types,
         },
       })
       .then((resp) => getResponseItemCount(resp));
@@ -72,7 +109,7 @@ class RepoListStore implements IRepoListStore, ILocalStore {
         runInAction(() => {
           this.list.set([]);
           this.status.set(FetchStatus.REJECTED);
-          this.pagination.setLastPage(page);
+          this.pagination.setLastPage(this.pagination.page);
         });
       });
   }
@@ -123,7 +160,10 @@ class RepoListStore implements IRepoListStore, ILocalStore {
     this.pagination.setLastPage(1);
   }
 
-  destroy = () => undefined;
+  destroy = () => {
+    this.pageQP.destroy();
+    this.typeQP.destroy();
+  };
 }
 
 export default RepoListStore;

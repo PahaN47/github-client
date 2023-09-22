@@ -1,43 +1,43 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import { observer } from 'mobx-react-lite';
+import React, { useCallback, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from 'components/Button';
 import Dropdown, { Option } from 'components/Dropdown';
 import Input from 'components/Input';
 import SearchIcon from 'components/icons/SearchIcon';
 import repoTypeOptions from 'config/repoTypeOptions';
 import { RepoType } from 'store/RepoListStore';
+import { useRepoList } from 'store/RepoListStore/RepoListStore.context';
 import getOptionValues from 'utils/getOptionValues';
 import cn from './Filters.module.scss';
 
 export type FilterValues = { org: string; types: Option<RepoType>[] };
 
-export type FiltersProps = {
-  initialOrg: string;
-  initialTypes: RepoType[];
-  onSearch: (value: FilterValues) => void;
-  loading?: boolean;
-};
+const getDropdownTitle = (types: RepoType[]) =>
+  types.length ? getOptionValues(types.map((type) => repoTypeOptions.entities[type])).join(', ') : 'Type';
 
-const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, loading }) => {
-  const [org, setOrg] = useState<string>(initialOrg);
-  const [types, setTypes] = useState<Option<RepoType>[]>(initialTypes.map((key) => repoTypeOptions.entities[key]));
+const Filters: React.FC = () => {
+  const navigate = useNavigate();
+  const { search } = useLocation();
+
   const options = useMemo(() => repoTypeOptions.order.map((key) => repoTypeOptions.entities[key]), []);
 
-  const getDropdownTitle = useCallback(
-    (types: Option<RepoType>[]) => (types.length ? getOptionValues(types).join(', ') : 'Type'),
-    [],
-  );
+  const store = useRepoList();
 
   const handleSearchClick = useCallback(() => {
-    onSearch({ org, types });
-  }, [onSearch, org, types]);
+    store.getRepoList();
+    navigate({ pathname: `/repos/${store.org}`, search });
+  }, [search]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key.toLowerCase() === 'enter') {
-        onSearch({ org, types });
+      if (e.key.toLowerCase() !== 'enter') {
+        return;
       }
+
+      handleSearchClick();
     },
-    [onSearch, org, types],
+    [handleSearchClick],
   );
 
   return (
@@ -46,19 +46,19 @@ const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, l
         className={cn['dropdown']}
         type="multi"
         options={options}
-        value={types}
+        value={store.types}
         getTitle={getDropdownTitle}
-        onChange={setTypes}
+        onChange={store.setTypes}
       />
       <div className={cn['search']}>
         <Input
           className={cn['search-input']}
-          value={org}
-          onChange={setOrg}
+          value={store.org}
+          onChange={store.setOrg}
           placeholder="Enter organization name"
           onKeyDown={handleKeyDown}
         />
-        <Button onClick={handleSearchClick} loading={loading}>
+        <Button onClick={handleSearchClick} loading={store.status.isPending}>
           <SearchIcon />
         </Button>
       </div>
@@ -66,4 +66,4 @@ const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, l
   );
 };
 
-export default Filters;
+export default observer(Filters);

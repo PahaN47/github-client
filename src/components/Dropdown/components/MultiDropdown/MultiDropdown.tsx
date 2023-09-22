@@ -9,10 +9,10 @@ import DropdownOption from '../DropdownOption';
 export type MultiDropdownProps<T extends string> = {
   className?: string;
   options: Option<T>[];
-  value: Option<T>[];
-  onChange: (value: Option<T>[]) => void;
+  value: T[];
+  onChange: (value: T[]) => void;
   disabled?: boolean;
-  getTitle: (value: Option<T>[]) => string;
+  getTitle: (value: T[]) => string;
 };
 
 const MultiDropdown = <T extends string>({
@@ -24,7 +24,9 @@ const MultiDropdown = <T extends string>({
   getTitle,
 }: MultiDropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
+
   const title = getTitle(value);
+
   const [inputValue, setInputValue] = useState(value.length ? title : '');
 
   const handleFocus = useCallback((e: React.FocusEvent<HTMLDivElement>) => {
@@ -54,21 +56,21 @@ const MultiDropdown = <T extends string>({
         .filter((item) => item.value.toLowerCase().startsWith(inputValue.trimStart().toLowerCase()))
         .map((item) => ({
           ...item,
-          selected: value.findIndex((valueItem) => valueItem.key === item.key) !== -1,
+          selected: value.findIndex((valueItem) => valueItem === item.key) !== -1,
         })),
     [inputValue, options, value],
   );
 
   const handleItemSelect = useCallback(
     (item: Option<T>) => {
-      onChange([...value, item]);
+      onChange([...value, item.key]);
     },
     [onChange, value],
   );
 
   const handleItemDeselect = useCallback(
     (item: Option<T>) => {
-      onChange(value.filter((selectedItem) => selectedItem.key !== item.key));
+      onChange(value.filter((selectedItem) => selectedItem !== item.key));
     },
     [onChange, value],
   );

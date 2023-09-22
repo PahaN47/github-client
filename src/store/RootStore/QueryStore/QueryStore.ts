@@ -1,41 +1,48 @@
-import { action, computed, makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import * as qs from 'qs';
+import { NavigateFunction } from 'react-router-dom';
 
 export interface IQueryStore {
-  queryString: string;
   params: qs.ParsedQs | null;
 }
 
 export type QueryStoreProps = {
   initialQs: string;
+  navigate: NavigateFunction;
 };
 
 class QueryStore implements IQueryStore {
-  queryString: string;
+  private _navigate: NavigateFunction;
+  private _incomingParams: Record<string, unknown> = {};
 
-  constructor({ initialQs }: QueryStoreProps) {
-    this.queryString = initialQs.startsWith('?') ? initialQs.slice(1) : initialQs;
+  params: qs.ParsedQs | null = null;
+
+  constructor({ initialQs, navigate }: QueryStoreProps) {
+    this._navigate = navigate;
+
+    this.update(initialQs.startsWith('?') ? initialQs.slice(1) : initialQs);
 
     makeObservable(this, {
-      setQueryString: action.bound,
-      params: computed,
-      queryString: observable,
+      update: action.bound,
+      params: observable.ref,
     });
   }
 
-  get params(): qs.ParsedQs | null {
-    if (!this.queryString) {
-      return null;
-    }
+  setParam(name: string, value: unknown): void {
+    this._incomingParams[name] = value;
 
-    return qs.parse(this.queryString);
+    const newParams = {
+      ...this.params,
+      ...this._incomingParams,
+    };
+
+    this._navigate({ search: qs.stringify(newParams) }, { replace: true });
   }
 
-  setQueryString(queryString: string) {
-    const queryStringSlice = queryString.startsWith('?') ? queryString.slice(1) : queryString;
-    if (queryStringSlice !== this.queryString) {
-      this.queryString = queryStringSlice;
-    }
+  update(queryString: string) {
+    this.params = qs.parse(queryString.startsWith('?') ? queryString.slice(1) : queryString);
+
+    this._incomingParams = {};
   }
 }
 
