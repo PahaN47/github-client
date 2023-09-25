@@ -28,7 +28,7 @@ module.exports = {
     'plugin:mobx/recommended',
   ],
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'import', 'prettier', 'react', 'react-hooks', 'mobx'],
+  plugins: ['@typescript-eslint', 'import', 'prettier', 'react', 'react-hooks', 'mobx', 'unused-imports'],
   rules: {
     'no-console': 'warn',
     'react/prop-types': 'off',
@@ -51,6 +51,13 @@ module.exports = {
       },
     ],
     'mobx/missing-observer': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'error',
+    'unused-imports/no-unused-vars': [
+      'warn',
+      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
+    ],
   },
   settings: {
     'import/parsers': {
