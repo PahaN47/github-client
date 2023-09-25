@@ -11,16 +11,16 @@ const isDev = process.env.NODE_ENV === 'development';
 
 const styleSettings = (module = false) => [
   isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-  !module
-    ? 'css-loader'
-    : {
-        loader: 'css-loader',
-        options: {
+  {
+    loader: 'css-loader',
+    options: module
+      ? {
           modules: {
             localIdentName: isDev ? '[path][name]__[local]' : '[contenthash:base64]',
           },
-        },
-      },
+        }
+      : undefined,
+  },
   {
     loader: 'postcss-loader',
     options: {
@@ -45,10 +45,9 @@ module.exports = {
       template: path.join(srcPath, 'index.html'),
     }),
     isDev && new ReactRefreshWebpackPlugin(),
-    !isDev &&
-      new MiniCssExtractPlugin({
-        filename: '[name]-[contenthash].css',
-      }),
+    new MiniCssExtractPlugin({
+      filename: '[name]-[contenthash].css',
+    }),
     new TsCheckerPlugin(),
     new Dotenv(),
   ].filter(Boolean),
