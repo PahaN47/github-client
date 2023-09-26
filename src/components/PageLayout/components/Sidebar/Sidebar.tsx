@@ -18,7 +18,7 @@ const Sidebar: React.FC<SidebarProps> = ({ className, visible = true, setVisible
   }, [setVisible]);
 
   return (
-    <AboveLayout className={classNames(className, cn['layout'])} visible={visible}>
+    <AboveLayout className={classNames(className, cn['layout'])} visible={visible} onClick={handleHideClick}>
       <div className={cn['sidebar-wrap']} data-visible={visible}>
         <Text className={cn['sidebar-title']} view="p-20" weight="medium" tag="div">
           Recent repositories:

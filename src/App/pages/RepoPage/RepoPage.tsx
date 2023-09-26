@@ -19,9 +19,13 @@ const RepoPage: React.FC = () => {
   const { owner, name } = useParams();
   const lastSeenRepos = useLastSeenRepos();
 
-  const currentRepoStore = useLocalStore(() => new CurrentRepoStore({ owner: owner ?? '', name: name ?? '' }));
+  const currentRepoStore = useLocalStore(() => new CurrentRepoStore());
 
   const loading = currentRepoStore.status.isPending;
+
+  useEffect(() => {
+    currentRepoStore.getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
+  }, [owner, name]);
 
   useEffect(
     action(() => {

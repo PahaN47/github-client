@@ -28,7 +28,7 @@ class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
   private _currentRepo?: CurrentRepoModel = undefined;
   status: FetchStatusStore = new FetchStatusStore();
 
-  constructor(props: GetCurrentRepoProps) {
+  constructor() {
     makeObservable<CurrentRepoStore, PrivateFields>(this, {
       destroy: false,
       status: observable,
@@ -37,8 +37,6 @@ class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
       getCurrentRepo: false,
       resetCurrentRepo: action.bound,
     });
-
-    this.getCurrentRepo(props);
   }
 
   get currentRepo() {

@@ -1,6 +1,5 @@
-import { useContext } from 'react';
 import ParsedQueryStore from 'store/ParsedQueryStore';
-import { RootStoreContext } from 'store/RootStore';
+import { useRootStore } from 'store/RootStore';
 import { QueryParamNormalizerObject } from 'store/models/QueryStore';
 import { DeepPartial } from 'store/types';
 import { useLocalStore } from 'utils/hooks';
@@ -9,7 +8,7 @@ import { useLocalStore } from 'utils/hooks';
 export const useQuery = <T extends Record<string, unknown>>(
   parserObject: QueryParamNormalizerObject<T>,
 ): [T, (params: DeepPartial<T>, replace?: boolean) => void] => {
-  const queryStore = useContext(RootStoreContext).query;
+  const queryStore = useRootStore().query;
   const parsedQueryStore = useLocalStore(() => new ParsedQueryStore(queryStore, parserObject));
 
   return [parsedQueryStore.params, parsedQueryStore.setQuery];

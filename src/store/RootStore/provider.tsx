@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useContext, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLocalStore } from 'utils/hooks';
 import RootStore from './RootStore';
@@ -16,7 +16,21 @@ const RootStoreProvider = ({ children }: React.PropsWithChildren) => {
       }),
   );
 
+  useEffect(() => {
+    rootStore.query.setQueryString(search);
+  }, [search]);
+
   return <RootStoreContext.Provider value={rootStore}>{children}</RootStoreContext.Provider>;
+};
+
+export const useRootStore = (): RootStore => {
+  const context = useContext(RootStoreContext);
+
+  if (!context) {
+    throw new Error('RootStoreContext is not found!');
+  }
+
+  return context;
 };
 
 export default RootStoreProvider;
