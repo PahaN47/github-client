@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { observer } from 'mobx-react';
 import React from 'react';
 import Text from 'components/Text';
 import { ContributorModel } from 'store/models/CurrentRepoStore';
@@ -26,4 +27,4 @@ const ContributorsList: React.FC<ContributorsListProps> = ({ className, list, co
   </div>
 );
 
-export default ContributorsList;
+export default observer(ContributorsList);

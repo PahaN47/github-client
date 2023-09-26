@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { observer } from 'mobx-react';
 import React from 'react';
 import Text from 'components/Text';
 import { LanguageModel } from 'store/models/CurrentRepoStore';
@@ -38,4 +39,4 @@ const LanguagesList: React.FC<LanguagesListProps> = ({ className, list }) => {
   );
 };
 
-export default LanguagesList;
+export default observer(LanguagesList);

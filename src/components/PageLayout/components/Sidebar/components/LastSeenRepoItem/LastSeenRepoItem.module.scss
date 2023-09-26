@@ -1,0 +1,30 @@
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  color: var(--text-primary);
+  text-decoration: none;
+  padding: var(--space-m) var(--space-xl);
+  background: var(--bg-default);
+  border-bottom: 1px solid var(--hint);
+  transition: all var(--default-duration);
+
+  &:hover {
+    color: var(--text-secondary);
+  }
+
+  .avatar {
+    width: 40px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+
+    .stars {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xxxs);
+    }
+  }
+}

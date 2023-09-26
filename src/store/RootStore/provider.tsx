@@ -8,7 +8,13 @@ export const RootStoreContext = createContext<RootStore>(null as unknown as Root
 const RootStoreProvider = ({ children }: React.PropsWithChildren) => {
   const { search } = useLocation();
 
-  const rootStore = useLocalStore(() => new RootStore({ queryStoreProps: { initialQs: search } }));
+  const rootStore = useLocalStore(
+    () =>
+      new RootStore({
+        queryStoreProps: { initialQs: search },
+        lastSeenReposStoreProps: { length: 5 },
+      }),
+  );
 
   return <RootStoreContext.Provider value={rootStore}>{children}</RootStoreContext.Provider>;
 };

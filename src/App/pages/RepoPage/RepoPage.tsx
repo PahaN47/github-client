@@ -1,11 +1,12 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
+import { action } from 'mobx';
 import { observer } from 'mobx-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
 import CurrentRepoStore from 'store/CurrentRepoStore';
-import { useLocalStore } from 'utils/hooks';
+import { useLastSeenRepos, useLocalStore } from 'utils/hooks';
 import ContributorsList from './components/ContributorsList';
 import LanguagesList from './components/LanguagesList';
 import RepoHomeLink from './components/RepoHomeLink';
@@ -16,10 +17,24 @@ import cn from './RepoPage.module.scss';
 
 const RepoPage: React.FC = () => {
   const { owner, name } = useParams();
+  const lastSeenRepos = useLastSeenRepos();
 
   const currentRepoStore = useLocalStore(() => new CurrentRepoStore({ owner: owner ?? '', name: name ?? '' }));
 
   const loading = currentRepoStore.status.isPending;
+
+  useEffect(
+    action(() => {
+      const currentRepo = currentRepoStore.currentRepo;
+
+      return () => {
+        if (currentRepo) {
+          lastSeenRepos.addRepo(currentRepo);
+        }
+      };
+    }),
+    [currentRepoStore.currentRepo],
+  );
 
   return (
     <PageLayout className={cn['page']} background="secondary">

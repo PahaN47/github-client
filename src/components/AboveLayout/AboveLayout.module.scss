@@ -1,0 +1,16 @@
+.layout {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  pointer-events: none;
+  transition: background var(--layout-transition-duration);
+
+  &[data-visible="true"] {
+    background: var(--layout);
+    pointer-events: initial;
+  }
+}
