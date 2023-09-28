@@ -31,7 +31,7 @@ class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
   constructor() {
     makeObservable<CurrentRepoStore, PrivateFields>(this, {
       destroy: false,
-      status: observable,
+      status: false,
       _currentRepo: observable.ref,
       currentRepo: computed,
       getCurrentRepo: false,

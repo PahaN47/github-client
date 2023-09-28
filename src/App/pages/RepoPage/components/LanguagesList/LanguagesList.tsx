@@ -1,15 +1,13 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react';
 import React from 'react';
 import Text from 'components/Text';
 import { LanguageModel } from 'store/models/CurrentRepoStore';
-import { Collection } from 'store/models/shared';
 import LanguageListItem from './components/LanguageListItem';
 import cn from './LanguagesList.module.scss';
 
 export type LanguagesListProps = {
   className?: string;
-  list: Collection<string, LanguageModel>;
+  list: LanguageModel[];
 };
 
 const LanguagesList: React.FC<LanguagesListProps> = ({ className, list }) => {
@@ -19,24 +17,24 @@ const LanguagesList: React.FC<LanguagesListProps> = ({ className, list }) => {
         Languages
       </Text>
       <div className={cn['bar']}>
-        {list.order.map((name) => (
+        {list.map(({ name, value, color }) => (
           <div
             key={name}
             className={cn['bar-section']}
             style={{
-              width: list.entities[name].value,
-              background: list.entities[name].color,
+              width: value,
+              background: color,
             }}
           />
         ))}
       </div>
       <div className={cn['list']}>
-        {list.order.map((name) => (
-          <LanguageListItem key={name} {...list.entities[name]} />
+        {list.map((item) => (
+          <LanguageListItem key={item.name} {...item} />
         ))}
       </div>
     </div>
   );
 };
 
-export default observer(LanguagesList);
+export default LanguagesList;

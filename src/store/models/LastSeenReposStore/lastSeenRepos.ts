@@ -31,7 +31,7 @@ export const normalizeLastSeenRepoFromJSON = (storeItem: LastSeenRepo): LastSeen
     id: +storeItem.id,
     name: String(storeItem.name),
     stargazersCount: +storeItem.stargazersCount,
-    owner: storeItem.owner as LastSeenRepo['owner'],
+    owner: storeItem.owner,
   };
 };
 

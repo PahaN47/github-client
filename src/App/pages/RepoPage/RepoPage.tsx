@@ -1,7 +1,6 @@
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { action } from 'mobx';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
@@ -23,22 +22,29 @@ const RepoPage: React.FC = () => {
 
   const loading = currentRepoStore.status.isPending;
 
+  const contributors = useMemo(
+    () => (currentRepoStore.currentRepo ? Object.values(currentRepoStore.currentRepo.contributors.entities) : []),
+    [currentRepoStore.currentRepo],
+  );
+
+  const languages = useMemo(
+    () => (currentRepoStore.currentRepo ? Object.values(currentRepoStore.currentRepo.languages.entities) : []),
+    [currentRepoStore.currentRepo],
+  );
+
   useEffect(() => {
     currentRepoStore.getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
   }, [owner, name]);
 
-  useEffect(
-    action(() => {
-      const currentRepo = currentRepoStore.currentRepo;
+  useEffect(() => {
+    const currentRepo = currentRepoStore.currentRepo;
 
-      return () => {
-        if (currentRepo) {
-          lastSeenRepos.addRepo(currentRepo);
-        }
-      };
-    }),
-    [currentRepoStore.currentRepo],
-  );
+    return () => {
+      if (currentRepo) {
+        lastSeenRepos.addRepo(currentRepo);
+      }
+    };
+  }, [currentRepoStore.currentRepo]);
 
   return (
     <PageLayout className={cn['page']} background="secondary">
@@ -53,11 +59,8 @@ const RepoPage: React.FC = () => {
             forks={currentRepoStore.currentRepo.forksCount}
           />
           <div className={cn['bottom-stats']}>
-            <ContributorsList
-              list={currentRepoStore.currentRepo.contributors}
-              count={currentRepoStore.currentRepo.contributorsCount}
-            />
-            <LanguagesList list={currentRepoStore.currentRepo.languages} />
+            <ContributorsList list={contributors} count={currentRepoStore.currentRepo.contributorsCount} />
+            <LanguagesList list={languages} />
           </div>
           {currentRepoStore.currentRepo.readme && (
             <div className={cn['readme-wrap']}>

@@ -1,5 +1,4 @@
 import classNames from 'classnames';
-import { observer } from 'mobx-react';
 import React from 'react';
 import Text from 'components/Text';
 import { useLastSeenRepos } from 'utils/hooks';
@@ -27,4 +26,4 @@ const LastSeenReposList: React.FC<LastSeenReposListProps> = ({ className, onItem
   );
 };
 
-export default observer(LastSeenReposList);
+export default LastSeenReposList;

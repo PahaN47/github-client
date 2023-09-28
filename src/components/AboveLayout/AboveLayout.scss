@@ -1,4 +1,4 @@
-.layout {
+.above-layout {
   position: fixed;
   top: 0;
   left: 0;
@@ -9,7 +9,8 @@
   pointer-events: none;
   transition: background var(--layout-transition-duration);
 
-  &[data-visible="true"] {
+  &-enter-active,
+  &-enter-done {
     background: var(--layout);
     pointer-events: initial;
   }

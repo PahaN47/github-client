@@ -18,7 +18,7 @@ export default class ParsedQueryStore<T extends Record<string, unknown>> impleme
 
   constructor(queryStore: QueryStore, parserObject: QueryParamNormalizerObject<T>) {
     this._queryStore = queryStore;
-    this._queryStore.setQueryString(router.state.location.search); // или лучше в конструктор передавать search?
+    this._queryStore.setQueryString(router.state.location.search);
     this._parser = normalizeQuery(parserObject);
 
     makeObservable<this, PrivateFields>(this, {

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import Avatar from 'components/Avatar';
 import Text from 'components/Text';
@@ -27,4 +27,4 @@ const LastSeenRepoItem: React.FC<LastSeenRepoItemProps> = ({ className, onClick,
   </Link>
 );
 
-export default LastSeenRepoItem;
+export default memo(LastSeenRepoItem);

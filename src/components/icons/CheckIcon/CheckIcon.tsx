@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from '../Icon';
 
 const CheckIcon: React.FC<IconProps> = ({ color, width = 24, height = 24, ...props }) => (
@@ -9,4 +9,4 @@ const CheckIcon: React.FC<IconProps> = ({ color, width = 24, height = 24, ...pro
   </Icon>
 );
 
-export default CheckIcon;
+export default memo(CheckIcon);
