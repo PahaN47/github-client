@@ -1,0 +1,10 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  .placeholder {
+    padding: var(--space-l);
+    text-align: center;
+  }
+}

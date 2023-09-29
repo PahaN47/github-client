@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { memo } from 'react';
 import cn from './Icon.module.scss';
 
 export type IconProps = React.SVGAttributes<SVGElement> & {
@@ -22,4 +22,4 @@ const Icon: React.FC<React.PropsWithChildren<IconWrapProps>> = ({ color, useStro
   </>
 );
 
-export default Icon;
+export default memo(Icon);

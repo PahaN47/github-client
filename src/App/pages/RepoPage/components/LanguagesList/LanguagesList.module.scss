@@ -17,25 +17,18 @@
 
   .bar {
     display: flex;
-    gap: var(--space-xxxxs);
     width: 100%;
+    min-width: 273px;
     height: 10px;
+    gap: var(--space-xxxxs);
+    border-radius: var(--border-radius);
+    overflow: hidden;
     animation: expand-bar var(--language-bar-animation-duration) forwards;
 
     &-section {
       min-width: var(--space-xxxxs);
       height: 100%;
       animation: expand-section var(--language-bar-animation-duration) forwards;
-
-      &:first-of-type {
-        border-top-left-radius: var(--border-radius);
-        border-bottom-left-radius: var(--border-radius);
-      }
-
-      &:last-of-type {
-        border-top-right-radius: var(--border-radius);
-        border-bottom-right-radius: var(--border-radius);
-      }
     }
   }
 

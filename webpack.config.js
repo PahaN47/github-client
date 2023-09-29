@@ -85,10 +85,17 @@ module.exports = {
       utils: path.join(srcPath, 'utils'),
     },
   },
+  performance: {
+    hints: false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
+  },
   devServer: {
     host: '127.0.0.1',
     port: 3000,
     hot: true,
-    historyApiFallback: true,
+    historyApiFallback: {
+      disableDotRule: true,
+    },
   },
 };

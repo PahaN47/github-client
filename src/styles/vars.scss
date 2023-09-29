@@ -6,14 +6,16 @@
   --readme-border-radius: 4px;
 
   // ANIMATIONS
+  --default-duration: 500ms;
   --loader-animation-duration: 3s;
-  --button-transition-duration: 500ms;
-  --card-transition-duration: 500ms;
-  --input-transition-duration: 500ms;
-  --dropdown-option-transition-duration: 500ms;
-  --input-transition-duration: 500ms;
+  --button-transition-duration: var(--default-duration);
+  --card-transition-duration: var(--default-duration);
+  --input-transition-duration: var(--default-duration);
+  --dropdown-option-transition-duration: var(--default-duration);
+  --input-transition-duration: var(--default-duration);
   --input-check-transition-duration: 300ms;
   --language-bar-animation-duration: 1s;
+  --layout-transition-duration: 300ms;
 
   // SPACING
   --space-xxxxl: 80px;
@@ -40,11 +42,15 @@
   --brand-hover: #1f883db3;
   --brand-active: #08531d;
   --color-hint: #7e7e7e;
+  --bg-default: #ffffff;
+  --hint: #d9d9d9;
   --link-color: #0080ff;
+  --layout: #00000040;
+  --shadow: 0 4px 10px #00000040;
 
   // PAGE COLORS
   --page-bg-primary: #f6f8fa;
-  --page-bg-secondary: #ffffff;
+  --page-bg-secondary: var(--bg-default);
 
   // LOADER COLORS
   --loader-bg: var(--brand);
@@ -53,10 +59,11 @@
   --text-primary: #000000;
   --text-secondary: #afadb5;
   --text-accent: var(--brand);
+  --text-brand-contrast: #ffffff;
 
   // BUTTON COLORS
   --button-primary-bg: var(--brand);
-  --button-primary-text: #ffffff;
+  --button-primary-text: var(--text-brand-contrast);
   --button-primary-bg-hover: var(--brand-hover);
   --button-primary-text-hover: var(--button-primary-text);
   --button-primary-bg-disabled: #d9d9d9;
@@ -65,12 +72,12 @@
   --button-primary-text-active: var(--button-primary-text);
 
   // CARD COLORS
-  --card-image-bg: #d9d9d9;
-  --card-bg: #ffffff;
-  --card-shadow-hover: 0 4px 10px #00000040;
+  --card-image-bg: var(--hint);
+  --card-bg: var(--bg-default);
+  --card-shadow-hover: var(--shadow);
 
   // INPUT COLORS
-  --input-bg: #ffffff;
+  --input-bg: var(--bg-default);
   --input-bg-disabled: var(--input-bg);
   --input-bg-focus: var(--input-bg);
   --input-border: var(--input-bg);
@@ -83,16 +90,16 @@
   --input-caret: var(--text-primary);
 
   // DROPDOWN COLORS
-  --dropdown-options-bg: #ffffff;
+  --dropdown-options-bg: var(--bg-default);
   --dropdown-options-bg-hover: var(--dropdown-options-bg);
   --dropdown-options-bg-selected: var(--dropdown-options-bg);
   --dropdown-option-text: var(--text-primary);
   --dropdown-option-text-hover: var(--text-secondary);
   --dropdown-option-text-selected: var(--text-accent);
-  --dropdown-options-shadow: 0 4px 10px #00000040;
+  --dropdown-options-shadow: var(--shadow);
 
   // CHECKBOX COLORS
-  --checkbox-bg: #ffffff;
+  --checkbox-bg: var(--bg-default);
   --checkbox-bg-disabled: #ffffff80;
   --checkbox-bg-hover: var(--checkbox-bg);
   --checkbox-border: var(--checkbox-bg);
@@ -104,10 +111,10 @@
 
   // NAVBAR COLORS
   --navbar-bg: var(--page-bg-primary);
-  --navbar-border: #d9d9d9;
+  --navbar-border: var(--hint);
 
   // IMAGE COLORS
-  --image-bg: #d9d9d9;
+  --image-bg: var(--hint);
   --image-border: #ecebeb;
 
   // TOPIC COLORS
@@ -115,12 +122,12 @@
   --topic-bg: #daedff;
 
   // TAG COLORS
-  --tag-bg: #d9d9d9;
+  --tag-bg: var(--hint);
   --tag-text: #0000009e;
 
   // README COLORS
-  --readme-border: #d9d9d9;
+  --readme-border: var(--hint);
 
-  //SCROLLBAR COLORS
+  // SCROLLBAR COLORS
   --scroll-default: #00000033;
 }

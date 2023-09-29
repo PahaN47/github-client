@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from 'components/icons/Icon';
 
 const SearchIcon: React.FC<IconProps> = ({ color, width = 24, height = 24, ...props }) => (
@@ -19,4 +19,4 @@ const SearchIcon: React.FC<IconProps> = ({ color, width = 24, height = 24, ...pr
   </Icon>
 );
 
-export default SearchIcon;
+export default memo(SearchIcon);

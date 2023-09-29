@@ -23,10 +23,10 @@ class RepoListStore implements IRepoListStore, ILocalStore {
 
   constructor(props: GetRepoListProps) {
     makeObservable(this, {
-      pagination: observable,
+      pagination: false,
       addRepos: false,
       list: observable,
-      status: observable,
+      status: false,
       destroy: false,
       getRepoList: false,
       resetRepoList: false,

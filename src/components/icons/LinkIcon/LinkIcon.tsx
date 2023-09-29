@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from 'components/icons/Icon';
 
 const LinkIcon: React.FC<IconProps> = ({ color, width = 16, height = 15, ...props }) => (
@@ -20,4 +20,4 @@ const LinkIcon: React.FC<IconProps> = ({ color, width = 16, height = 15, ...prop
   </Icon>
 );
 
-export default LinkIcon;
+export default memo(LinkIcon);

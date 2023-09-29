@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from '../Icon';
 
 const ForkIcon: React.FC<IconProps> = ({ color, width = 16, height = 16, ...props }) => (
@@ -12,4 +12,4 @@ const ForkIcon: React.FC<IconProps> = ({ color, width = 16, height = 16, ...prop
   </Icon>
 );
 
-export default ForkIcon;
+export default memo(ForkIcon);

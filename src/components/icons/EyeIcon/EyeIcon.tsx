@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Icon, { IconProps } from '../Icon';
 
 const EyeIcon: React.FC<IconProps> = ({ color, width = 16, height = 16, ...props }) => (
@@ -13,4 +13,4 @@ const EyeIcon: React.FC<IconProps> = ({ color, width = 16, height = 16, ...props
   </Icon>
 );
 
-export default EyeIcon;
+export default memo(EyeIcon);
