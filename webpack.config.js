@@ -49,7 +49,9 @@ module.exports = {
       filename: '[name]-[contenthash].css',
     }),
     new TsCheckerPlugin(),
-    new Dotenv(),
+    new Dotenv({
+      systemvars: true,
+    }),
   ].filter(Boolean),
   module: {
     rules: [
