@@ -18,4 +18,12 @@
       background: var(--page-bg-secondary);
     }
   }
+
+  .loader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+  }
 }

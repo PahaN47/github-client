@@ -44,7 +44,7 @@ class CurrentRepoStore implements ICurrentRepoStore, ILocalStore {
   }
 
   getCurrentRepo = async ({ owner, name }: GetCurrentRepoProps) => {
-    runInAction(() => this.status.set(FetchStatus.PENDGING));
+    runInAction(() => this.status.set(FetchStatus.PENDING));
 
     try {
       const currentRepo = await axiosInstance

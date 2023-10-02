@@ -1,5 +1,5 @@
 export enum FetchStatus {
-  PENDGING = 'pending',
+  PENDING = 'pending',
   FULFILLED = 'fulfilled',
   REJECTED = 'rejected',
   IDLE = 'idle',
