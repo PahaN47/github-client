@@ -6,6 +6,12 @@ import Text from 'components/Text';
 import { NAVBAR_AVATAR_TRANSITION_DURATION } from './NavbarAvatar.const';
 import cn from './NavbarAvatar.module.scss';
 
+const transitionClassNames = {
+  enterDone: cn['menu-enter-done'],
+  enterActive: cn['menu-enter-active'],
+  exitActive: cn['menu-exit-active'],
+};
+
 export type NavbarAvatarProps = {
   src: string;
   login: string;
@@ -24,7 +30,7 @@ const NavbarAvatar: React.FC<NavbarAvatarProps> = ({ src, login, onLogout }) => 
         in={isMenuVisible}
         nodeRef={menuRef}
         timeout={NAVBAR_AVATAR_TRANSITION_DURATION}
-        classNames={cn['menu']}
+        classNames={transitionClassNames}
         mountOnEnter
         unmountOnExit
       >
