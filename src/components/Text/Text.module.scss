@@ -9,6 +9,10 @@
     @include text-button;
   }
 
+  &[data-view="button-s"] {
+    @include text-button-s;
+  }
+
   &[data-view="p-20"] {
     @include text-p-20;
   }

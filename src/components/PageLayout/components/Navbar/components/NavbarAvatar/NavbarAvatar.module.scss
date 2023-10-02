@@ -1,0 +1,91 @@
+.wrap {
+  position: relative;
+  display: flex;
+
+  .avatar {
+    width: 32px;
+  }
+
+  .menu {
+    position: absolute;
+    top: calc(var(--space-xxs) * -1);
+    right: calc(var(--space-xxs) * -1);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xxs);
+    box-sizing: content-box;
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    height: calc(100% + var(--space-xxs));
+    padding: var(--space-xxs);
+    padding-bottom: 0;
+    background: var(--bg-default);
+    border: 1px solid var(--hint);
+    border-radius: 24px;
+    opacity: 0;
+    overflow: hidden;
+    pointer-events: none;
+    transition: all var(--default-duration-short);
+
+    .login {
+      flex-shrink: 0;
+      width: calc(100% - 32px);
+      margin: 5px 0;
+    }
+
+    .content {
+      display: flex;
+      flex-direction: column;
+      height: 0;
+      overflow: hidden;
+      flex-shrink: 1;
+    }
+
+    .logout {
+      div {
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    & .login,
+    & .content {
+      opacity: 0;
+      transition: all var(--default-duration-short);
+    }
+
+    &-enter-active,
+    &-enter-done {
+      width: 200px;
+      opacity: 1;
+      pointer-events: initial;
+
+      & .login {
+        opacity: 1;
+      }
+    }
+
+    &-enter-done {
+      height: fit-content;
+      padding-bottom: var(--space-xxs);
+      border-radius: var(--border-radius) 24px var(--border-radius) var(--border-radius);
+      box-shadow: var(--shadow);
+
+      & .content {
+        height: 32px;
+        flex-shrink: 0;
+        opacity: 1;
+      }
+    }
+
+    &-exit-active .content {
+      display: none;
+    }
+
+    &:not(&-exit-done) + .avatar {
+      z-index: 2;
+    }
+  }
+}

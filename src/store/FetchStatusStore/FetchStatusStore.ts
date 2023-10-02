@@ -27,7 +27,7 @@ class CurrentRepoStore implements IFetchStatusStore {
     return this._status === FetchStatus.IDLE;
   }
   get isPending() {
-    return this._status === FetchStatus.PENDGING;
+    return this._status === FetchStatus.PENDING;
   }
   get isFulfilled() {
     return this._status === FetchStatus.FULFILLED;

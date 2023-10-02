@@ -36,7 +36,7 @@ class RepoListStore implements IRepoListStore, ILocalStore {
   }
 
   getRepoList({ org, page = 1, types }: GetRepoListProps) {
-    this.status.set(FetchStatus.PENDGING);
+    this.status.set(FetchStatus.PENDING);
     this.pagination.setPage(page);
 
     const requestRepoList = axiosInstance
