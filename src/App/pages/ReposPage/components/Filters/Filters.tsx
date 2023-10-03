@@ -1,11 +1,15 @@
+import { observer } from 'mobx-react';
 import React, { useCallback, useMemo, useState } from 'react';
 import Button from 'components/Button';
 import Dropdown, { Option } from 'components/Dropdown';
-import Input from 'components/Input';
+import Loader from 'components/Loader';
 import SearchIcon from 'components/icons/SearchIcon';
 import repoTypeOptions from 'config/repoTypeOptions';
+import OrgSearchStore from 'store/OrgSearchStore';
 import { RepoType } from 'store/RepoListStore';
 import getOptionValues from 'utils/getOptionValues';
+import { useLocalStore } from 'utils/hooks';
+import FiltersInput from './components/FiltersInput';
 import cn from './Filters.module.scss';
 
 export type FilterValues = { org: string; types: Option<RepoType>[] };
@@ -21,21 +25,28 @@ const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, l
   const [org, setOrg] = useState<string>(initialOrg);
   const [types, setTypes] = useState<Option<RepoType>[]>(initialTypes.map((key) => repoTypeOptions.entities[key]));
   const options = useMemo(() => repoTypeOptions.order.map((key) => repoTypeOptions.entities[key]), []);
+  const repoSearch = useLocalStore(() => new OrgSearchStore());
+
+  const handleOrgChange = useCallback(
+    (value: string) => {
+      setOrg(value);
+      repoSearch.updateOptions(value);
+    },
+    [repoSearch],
+  );
 
   const getDropdownTitle = useCallback(
     (types: Option<RepoType>[]) => (types.length ? getOptionValues(types).join(', ') : 'Type'),
     [],
   );
 
-  const handleSearchClick = useCallback(() => {
+  const handleSearch = useCallback(() => {
     onSearch({ org, types });
   }, [onSearch, org, types]);
 
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
-      if (e.key.toLowerCase() === 'enter') {
-        onSearch({ org, types });
-      }
+  const handleEnter = useCallback(
+    (newOrg?: string) => {
+      onSearch({ org: newOrg || org, types });
     },
     [onSearch, org, types],
   );
@@ -51,19 +62,20 @@ const Filters: React.FC<FiltersProps> = ({ initialOrg, initialTypes, onSearch, l
         onChange={setTypes}
       />
       <div className={cn['search']}>
-        <Input
+        <FiltersInput
           className={cn['search-input']}
           value={org}
-          onChange={setOrg}
+          onChange={handleOrgChange}
           placeholder="Enter organization name"
-          onKeyDown={handleKeyDown}
+          onEnterKey={handleEnter}
+          options={repoSearch.options}
         />
-        <Button onClick={handleSearchClick} loading={loading}>
-          <SearchIcon />
+        <Button onClick={handleSearch} disabled={loading}>
+          {loading ? <Loader className={cn['button-loader']} size="s" /> : <SearchIcon />}
         </Button>
       </div>
     </div>
   );
 };
 
-export default Filters;
+export default observer(Filters);

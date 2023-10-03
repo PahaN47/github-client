@@ -1,0 +1,14 @@
+.wrap {
+  display: flex;
+  padding: var(--space-s) var(--space-xs);
+  background: var(--bg-default);
+  border: none;
+  border-radius: 0;
+  outline: none;
+  transition: all var(--default-duration-short);
+
+  &:hover,
+  &:focus {
+    background: var(--hint);
+  }
+}

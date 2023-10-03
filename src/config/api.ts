@@ -8,6 +8,8 @@ export const API_ENDPOINTS = {
   },
   AUTH: (code: string) => `${process.env.AUTH_DEPLOY}/authenticate/${code}`,
   AUTH_USER: '/user',
+  SEARCH_ORG: (search: string) =>
+    `https://api.github.com/search/users?q=${search}+type:org&sort=repositories&per_page=5`,
   ORG: (org: string) => ({
     index: `/orgs/${org}`,
     REPOS: `/orgs/${org}/repos`,

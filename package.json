@@ -14,7 +14,6 @@
     "defaults"
   ],
   "dependencies": {
-    "@types/react-transition-group": "^4.4.7",
     "@typescript-eslint/parser": "^6.6.0",
     "@uiw/react-markdown-preview": "^4.1.15",
     "axios": "^1.5.0",
@@ -30,7 +29,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "6",
     "react-transition-group": "^4.4.5",
-    "regenerator-runtime": "^0.14.0"
+    "regenerator-runtime": "^0.14.0",
+    "throttle-debounce": "^5.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.15",
@@ -48,6 +48,8 @@
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@types/react-router-dom": "^5.3.3",
+    "@types/react-transition-group": "^4.4.7",
+    "@types/throttle-debounce": "^5.0.0",
     "@types/webpack-env": "^1.18.1",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "autoprefixer": "^10.4.16",

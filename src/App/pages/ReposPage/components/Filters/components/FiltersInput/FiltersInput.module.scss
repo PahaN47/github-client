@@ -1,0 +1,11 @@
+.wrap {
+  position: relative;
+
+  .options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+  }
+}
