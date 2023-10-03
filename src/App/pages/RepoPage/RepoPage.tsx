@@ -1,4 +1,4 @@
-import MarkdownPreview from '@uiw/react-markdown-preview';
+import MarkdownPreview, { MarkdownPreviewProps } from '@uiw/react-markdown-preview';
 import { observer } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
@@ -31,6 +31,8 @@ const RepoPage: React.FC = () => {
     () => (currentRepoStore.currentRepo ? Object.values(currentRepoStore.currentRepo.languages.entities) : []),
     [currentRepoStore.currentRepo],
   );
+
+  const markdownProps = useMemo<MarkdownPreviewProps['wrapperElement']>(() => ({ 'data-color-mode': 'light' }), []);
 
   useEffect(() => {
     currentRepoStore.getCurrentRepo({ owner: owner ?? '', name: name ?? '' });
@@ -66,7 +68,7 @@ const RepoPage: React.FC = () => {
             <div className={cn['readme-wrap']}>
               <div className={cn['readme-title']}>README.md</div>
               <div className={cn['readme-content']}>
-                <MarkdownPreview source={currentRepoStore.currentRepo.readme} />
+                <MarkdownPreview source={currentRepoStore.currentRepo.readme} wrapperElement={markdownProps} />
               </div>
             </div>
           )}
