@@ -153,14 +153,9 @@ const FiltersInput: React.FC<FiltersInputProps> = ({
       }
     };
 
-    const handleOptionsClick = () => undefined;
-
     options.addEventListener('keydown', handleOptionsKeyDown);
-    options.addEventListener('click', handleOptionsClick);
-
     return () => {
       options.removeEventListener('keydown', handleOptionsKeyDown);
-      options.removeEventListener('click', handleOptionsClick);
     };
   }, []);
 
