@@ -29,7 +29,7 @@ const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, opti
   );
 
   const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(
-    () => Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchEnd', handleSelect]]),
+    () => Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleSelect]]),
     [handleSelect],
   );
 
