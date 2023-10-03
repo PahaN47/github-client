@@ -28,10 +28,10 @@ const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, opti
     [handleSelect],
   );
 
-  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(
-    () => Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleSelect]]),
-    [handleSelect],
-  );
+  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(() => {
+    alert(isSafariMobile ? 'SAFARI MOBILE' : 'NOT SAFARI MOBILE');
+    return Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleSelect]]);
+  }, [handleSelect]);
 
   return (
     <button className={classNames(className, cn['wrap'])} {...clickHandler} onKeyDown={handleKeyDown} ref={optionRef}>

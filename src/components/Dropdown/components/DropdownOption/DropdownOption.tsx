@@ -30,10 +30,10 @@ const DropDownOption = <T extends string>({
     }
   }, [onDeselect, onSelect, selected, value]);
 
-  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(
-    () => Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleClick]]),
-    [handleClick],
-  );
+  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(() => {
+    alert(isSafariMobile ? 'SAFARI MOBILE' : 'NOT SAFARI MOBILE');
+    return Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleClick]]);
+  }, [handleClick]);
 
   return (
     <button className={classNames(className, cn['option'], selected && cn['selected'])} {...clickHandler}>
