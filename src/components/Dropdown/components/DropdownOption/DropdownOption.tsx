@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import { Option } from 'components/Dropdown';
 import Text from 'components/Text';
 import { isSafariMobile } from 'config/isSafariMobile';
@@ -30,13 +30,12 @@ const DropDownOption = <T extends string>({
     }
   }, [onDeselect, onSelect, selected, value]);
 
-  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(() => {
-    alert(isSafariMobile ? 'SAFARI MOBILE' : 'NOT SAFARI MOBILE');
-    return Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleClick]]);
-  }, [handleClick]);
-
   return (
-    <button className={classNames(className, cn['option'], selected && cn['selected'])} {...clickHandler}>
+    <button
+      className={classNames(className, cn['option'], selected && cn['selected'])}
+      onClick={handleClick}
+      onTouchStart={isSafariMobile ? handleClick : undefined}
+    >
       <Text view="p-16">{value.value}</Text>
     </button>
   );

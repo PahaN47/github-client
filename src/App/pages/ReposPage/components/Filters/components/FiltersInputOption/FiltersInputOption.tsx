@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { isSafariMobile } from 'config/isSafariMobile';
 import cn from './FiltersInputOption.module.scss';
 
@@ -28,13 +28,14 @@ const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, opti
     [handleSelect],
   );
 
-  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(() => {
-    alert(isSafariMobile ? 'SAFARI MOBILE' : 'NOT SAFARI MOBILE');
-    return Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchStart', handleSelect]]);
-  }, [handleSelect]);
-
   return (
-    <button className={classNames(className, cn['wrap'])} {...clickHandler} onKeyDown={handleKeyDown} ref={optionRef}>
+    <button
+      className={classNames(className, cn['wrap'])}
+      onClick={handleSelect}
+      onTouchStart={isSafariMobile ? handleSelect : undefined}
+      onKeyDown={handleKeyDown}
+      ref={optionRef}
+    >
       {option}
     </button>
   );
