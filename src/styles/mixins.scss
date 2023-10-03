@@ -67,13 +67,7 @@
     -webkit-appearance: none;
     background-color: transparent;
     -webkit-overflow-scrolling: auto;
-  }
-
-  &::-webkit-scrollbar:vertical {
     width: $track;
-  }
-
-  &::-webkit-scrollbar:horizontal {
     height: $track;
   }
 
