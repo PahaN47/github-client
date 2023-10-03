@@ -19,5 +19,9 @@
         color: var(--color-hint);
       }
     }
+
+    .button-loader svg {
+      color: currentColor;
+    }
   }
 }

@@ -26,23 +26,24 @@
 
   width: 60px;
 
-  &[data-size='s'] {
+  &[data-size="s"] {
     width: 24px;
   }
 
-  &[data-size='m'] {
+  &[data-size="m"] {
     width: 48px;
   }
 
   svg {
     width: calc((2 / 3) * 100%);
     aspect-ratio: 1 / 1;
+    color: var(--loader-bg);
     animation: var(--loader-animation-duration) loader-wrap infinite linear;
     transform: rotate(80deg);
 
     circle {
       fill: none;
-      stroke: var(--loader-bg);
+      stroke: currentColor;
       stroke-width: 30;
       stroke-dasharray: 620 620;
       animation: var(--loader-animation-duration) loader infinite linear;
