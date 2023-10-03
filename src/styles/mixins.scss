@@ -64,10 +64,12 @@
   scrollbar-gutter: stable;
 
   &::-webkit-scrollbar {
+    -webkit-appearance: none;
     background-color: transparent;
   }
 
   &::-webkit-scrollbar:vertical {
+    -webkit-appearance: none;
     width: $track;
   }
 
