@@ -21,6 +21,8 @@
   }
 
   &:not(:disabled) {
+    cursor: pointer;
+
     &:hover {
       color: var(--button-primary-text-hover);
       background: var(--button-primary-bg-hover);

@@ -6,6 +6,7 @@
   text-align: start;
   background: var(--dropdown-options-bg);
   border: none;
+  cursor: pointer;
   transition: all var(--dropdown-option-transition-duration);
 
   &:hover {
