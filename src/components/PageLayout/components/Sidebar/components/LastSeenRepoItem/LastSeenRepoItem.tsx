@@ -16,7 +16,7 @@ const LastSeenRepoItem: React.FC<LastSeenRepoItemProps> = ({ className, onClick,
   <Link className={classNames(className, cn['wrap'])} to={`/repos/${owner.login}/${name}`} onClick={onClick}>
     <Avatar className={cn['avatar']} src={owner.avatarUrl} />
     <div className={cn['content']}>
-      <Text view="p-18" weight="bold" maxLines={1}>
+      <Text className={cn['title']} view="p-18" weight="bold" maxLines={1}>
         {name}
       </Text>
       <Text className={cn['stars']} view="p-14" weight="medium" tag="div" color="secondary">

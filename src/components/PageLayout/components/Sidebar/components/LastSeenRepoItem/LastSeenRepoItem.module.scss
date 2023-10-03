@@ -29,6 +29,10 @@
     display: flex;
     flex-direction: column;
 
+    .title {
+      word-break: break-all;
+    }
+
     .stars {
       display: flex;
       align-items: center;
