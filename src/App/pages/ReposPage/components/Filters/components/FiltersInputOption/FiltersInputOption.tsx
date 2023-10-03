@@ -31,6 +31,7 @@ const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, opti
     <button
       className={classNames(className, cn['wrap'])}
       onClick={handleSelect}
+      onTouchStart={handleSelect}
       onKeyDown={handleKeyDown}
       ref={optionRef}
     >
