@@ -18,6 +18,12 @@
   line-height: 48px;
 }
 
+@mixin text-title-mobile {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 36px;
+}
+
 @mixin text-p-20 {
   font-size: 20px;
   font-weight: 400;
@@ -78,5 +84,29 @@
     background-clip: padding-box;
     border: calc(($track - $thumb) / 2) solid transparent;
     border-radius: 9999px;
+  }
+}
+
+@mixin mediaMobile {
+  @media screen and (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin mediaTablet {
+  @media screen and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin mediaSmallDesktop {
+  @media screen and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin mediaTouch {
+  @media (pointer: coarse) {
+    @content;
   }
 }

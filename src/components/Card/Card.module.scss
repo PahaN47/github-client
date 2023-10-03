@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 .card {
   position: relative;
   display: flex;
@@ -13,6 +15,12 @@
 
   &:hover {
     box-shadow: var(--card-shadow-hover);
+  }
+
+  @include mediaTouch {
+    &:active {
+      box-shadow: var(--card-shadow-hover);
+    }
   }
 
   .image {

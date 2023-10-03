@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 .wrap {
   display: flex;
   align-items: center;
@@ -11,6 +13,12 @@
 
   &:hover {
     color: var(--text-secondary);
+  }
+
+  @include mediaTouch {
+    &:active {
+      color: var(--text-secondary);
+    }
   }
 
   .avatar {

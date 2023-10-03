@@ -39,22 +39,13 @@ const FiltersInput: React.FC<FiltersInputProps> = ({
     [getOptions, onChange],
   );
 
-  const handleOptionEnter = useCallback(
+  const handleOptionSelect = useCallback(
     (option: string) => {
       onChange(option);
       onEnterKey?.(option);
       setOptionsVisible(false);
     },
     [onChange, onEnterKey],
-  );
-
-  const handleOptionSelect = useCallback(
-    (value: string) => {
-      onChange(value);
-      inputRef.current?.focus();
-      setOptionsVisible(false);
-    },
-    [onChange],
   );
 
   const handleInputKeyDown = useCallback(
@@ -182,7 +173,6 @@ const FiltersInput: React.FC<FiltersInputProps> = ({
         className={cn['options']}
         options={options}
         onOptionSelect={handleOptionSelect}
-        onOptionEnter={handleOptionEnter}
         visible={optionsVisible}
         ref={optionsRef}
       />

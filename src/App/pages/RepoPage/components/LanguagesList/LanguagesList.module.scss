@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 @keyframes expand-bar {
   from {
     width: calc(var(--border-radius) * 2);
@@ -15,6 +17,15 @@
   flex-direction: column;
   gap: var(--space-xxs);
   min-width: 273px;
+
+  @include mediaTablet {
+    max-width: 300px;
+  }
+
+  @include mediaMobile {
+    min-width: 0;
+    max-width: 250px;
+  }
 
   .bar {
     display: flex;

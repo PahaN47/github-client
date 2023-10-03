@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 .option {
   padding: var(--space-s) var(--space-xs);
   color: var(--dropdown-option-text);
@@ -9,6 +11,13 @@
   &:hover {
     color: var(--dropdown-option-text-hover);
     background: var(--dropdown-options-bg-hover);
+  }
+
+  @include mediaTouch {
+    &:active {
+      color: var(--dropdown-option-text-hover);
+      background: var(--dropdown-options-bg-hover);
+    }
   }
 
   &.selected {

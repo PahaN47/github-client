@@ -52,7 +52,7 @@ const RepoPage: React.FC = () => {
         <>
           <RepoTitle avatar={currentRepoStore.currentRepo.owner.avatarUrl} name={currentRepoStore.currentRepo.name} />
           {currentRepoStore.currentRepo.homepage && <RepoHomeLink url={currentRepoStore.currentRepo.homepage} />}
-          <TopicList topics={currentRepoStore.currentRepo.topics} />
+          {!!currentRepoStore.currentRepo.topics.length && <TopicList topics={currentRepoStore.currentRepo.topics} />}
           <RepoStats
             stars={currentRepoStore.currentRepo.stargazersCount}
             watching={currentRepoStore.currentRepo.watchersCount}

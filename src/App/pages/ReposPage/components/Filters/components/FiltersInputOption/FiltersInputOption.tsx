@@ -6,10 +6,9 @@ export type FiltersInputOptionProps = React.PropsWithChildren & {
   className?: string;
   option: string;
   onSelect?: (value: string) => void;
-  onEnter?: (value: string) => void;
 };
 
-const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, option, onSelect, onEnter }) => {
+const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, option, onSelect }) => {
   const optionRef = useRef<HTMLButtonElement>(null);
 
   const handleSelect = useCallback(() => {
@@ -23,9 +22,9 @@ const FiltersInputOption: React.FC<FiltersInputOptionProps> = ({ className, opti
       }
 
       e.preventDefault();
-      onEnter?.(option);
+      handleSelect();
     },
-    [onEnter, option],
+    [handleSelect],
   );
 
   return (

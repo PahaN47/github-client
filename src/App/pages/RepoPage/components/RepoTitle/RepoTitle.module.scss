@@ -1,22 +1,67 @@
+@import "styles/mixins";
+
 .wrap {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: var(--space-m);
   padding-bottom: var(--space-m);
 
-  .back {
-    color: var(--text-accent);
-    transition: all var(--button-transition-duration);
+  .content {
+    display: flex;
+    align-items: center;
+    gap: var(--space-m);
+    margin-top: 4px;
 
-    &:hover {
-      color: var(--text-secondary);
+    .back {
+      color: var(--text-accent);
+      transition: all var(--button-transition-duration);
+
+      &:hover {
+        color: var(--text-secondary);
+      }
+
+      @include mediaTouch {
+        &:active {
+          color: var(--text-secondary);
+        }
+      }
+    }
+
+    .avatar {
+      width: 40px;
+      aspect-ratio: 1 / 1;
+      border-radius: var(--border-radius);
+      object-fit: cover;
     }
   }
 
-  .avatar {
-    width: 40px;
-    aspect-ratio: 1 / 1;
-    border-radius: var(--border-radius);
-    object-fit: cover;
+  .title {
+    word-break: break-all;
+  }
+
+  @include mediaSmallDesktop {
+    .title {
+      @include text-title-mobile;
+      margin-top: 2px;
+    }
+
+    .content {
+      margin-top: 0;
+    }
+  }
+
+  @include mediaTablet {
+    gap: var(--space-s);
+    padding-bottom: 0;
+
+    .title {
+      @include text-p-20;
+      font-weight: 700;
+      margin-top: 8px;
+    }
+
+    .content {
+      gap: var(--space-s);
+    }
   }
 }

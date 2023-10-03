@@ -6,15 +6,40 @@
   flex-direction: column;
   align-items: center;
   padding: var(--space-xxxl) var(--space-page);
+  padding-right: calc(var(--space-page) - 16px);
   overflow-y: scroll;
   overflow-x: hidden;
+
+  @include mediaSmallDesktop {
+    padding: var(--space-xxxl);
+    padding-right: calc(var(--space-xxxl) - 16px);
+  }
+
+  @include mediaMobile {
+    padding-right: calc(var(--space-xl) - 16px);
+    padding-left: var(--space-xl);
+  }
 
   .title {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: var(--space-xl);
+    text-align: center;
     margin-bottom: var(--space-ml);
+
+    @include mediaTablet {
+      gap: var(--space-m);
+
+      &-top {
+        @include text-title-mobile;
+        font-weight: bold;
+      }
+
+      &-bottom {
+        @include text-p-16;
+      }
+    }
   }
 
   .repo-list {
@@ -29,8 +54,20 @@
     .repos {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 80px;
+      gap: var(--space-xxxxl);
       width: 100%;
+
+      @include mediaSmallDesktop {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      @include mediaTablet {
+        gap: var(--space-xxxl);
+      }
+
+      @include mediaMobile {
+        grid-template-columns: 1fr;
+      }
 
       .card-caption {
         display: flex;
