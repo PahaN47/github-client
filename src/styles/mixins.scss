@@ -66,10 +66,10 @@
   &::-webkit-scrollbar {
     -webkit-appearance: none;
     background-color: transparent;
+    -webkit-overflow-scrolling: auto;
   }
 
   &::-webkit-scrollbar:vertical {
-    -webkit-appearance: none;
     width: $track;
   }
 
@@ -86,6 +86,7 @@
     background-clip: padding-box;
     border: calc(($track - $thumb) / 2) solid transparent;
     border-radius: 9999px;
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
   }
 }
 
