@@ -1,7 +1,8 @@
 import classNames from 'classnames';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Option } from 'components/Dropdown';
 import Text from 'components/Text';
+import { isSafariMobile } from 'config/isSafariMobile';
 import cn from './DropdownOption.module.scss';
 
 export type DropDownOptionProps<T extends string> = {
@@ -29,8 +30,13 @@ const DropDownOption = <T extends string>({
     }
   }, [onDeselect, onSelect, selected, value]);
 
+  const clickHandler = useMemo<React.ButtonHTMLAttributes<HTMLButtonElement>>(
+    () => Object.fromEntries([[isSafariMobile ? 'onClick' : 'onTouchEnd', handleClick]]),
+    [handleClick],
+  );
+
   return (
-    <button className={classNames(className, cn['option'], selected && cn['selected'])} onClick={handleClick}>
+    <button className={classNames(className, cn['option'], selected && cn['selected'])} {...clickHandler}>
       <Text view="p-16">{value.value}</Text>
     </button>
   );
