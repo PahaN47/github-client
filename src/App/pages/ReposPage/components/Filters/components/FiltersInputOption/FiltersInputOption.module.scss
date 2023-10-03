@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 .wrap {
   display: flex;
   padding: var(--space-s) var(--space-xs);
@@ -10,5 +12,11 @@
   &:hover,
   &:focus {
     background: var(--hint);
+  }
+
+  @include mediaTouch {
+    &:active {
+      background: var(--hint);
+    }
   }
 }

@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 .wrap {
   display: flex;
   align-items: center;
@@ -17,6 +19,12 @@
 
     &:hover {
       color: var(--text-accent);
+    }
+
+    @include mediaTouch {
+      &:active {
+        color: var(--text-accent);
+      }
     }
 
     &:disabled {

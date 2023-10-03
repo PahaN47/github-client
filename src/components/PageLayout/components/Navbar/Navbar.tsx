@@ -26,15 +26,17 @@ const Navbar: React.FC<NavbarProps> = ({ loading, user, authUrl, onMenuClick, on
 
   return (
     <header className={cn['wrap']}>
-      <div className={cn['menu']} onClick={onMenuClick}>
-        <MenuIcon width={32} height={32} />
+      <div className={cn['wrap-left']}>
+        <div className={cn['menu']} onClick={onMenuClick}>
+          <MenuIcon width={32} height={32} />
+        </div>
+        <Link className={cn['logo-wrap']} to="/">
+          <LogoIcon />
+          <Text view="p-20" weight="bold" tag="p">
+            GitHub Client
+          </Text>
+        </Link>
       </div>
-      <Link className={cn['logo-wrap']} to="/">
-        <LogoIcon />
-        <Text view="p-20" weight="bold">
-          GitHub Client
-        </Text>
-      </Link>
       {loading ? (
         <Loader className={cn['loader']} />
       ) : user ? (

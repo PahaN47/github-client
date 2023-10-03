@@ -12,7 +12,7 @@ export type RepoHomeLinkProps = {
 
 const RepoHomeLink: React.FC<RepoHomeLinkProps> = memo(({ className, url }) => (
   <div className={classNames(className, cn['wrap'])}>
-    <LinkIcon color="primary" />
+    <LinkIcon className={cn['icon']} color="primary" />
     <Link to={url} target="_blank">
       <Text view="p-16" weight="bold">
         {url.split('://')[1]}

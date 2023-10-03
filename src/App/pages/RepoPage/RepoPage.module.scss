@@ -6,12 +6,30 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--space-xl);
-  padding: var(--space-xxxl) var(--space-page-l) var(--space-page-xl) var(--space-page-s);
+  padding-top: var(--space-xxxl);
+  padding-right: calc(var(--space-page-l) - 16px);
+  padding-bottom: var(--space-page-xl);
+  padding-left: var(--space-page-s);
   overflow: auto;
+
+  @include mediaSmallDesktop {
+    padding-right: calc(var(--space-xxxl) - 16px);
+    padding-left: var(--space-xxxl);
+  }
+
+  @include mediaMobile {
+    padding-right: calc(var(--space-xl) - 16px);
+    padding-left: var(--space-xl);
+  }
 
   .bottom-stats {
     display: flex;
     gap: 80px;
+
+    @include mediaTablet {
+      flex-direction: column;
+      gap: var(--space-xl);
+    }
   }
 
   .readme-wrap {
@@ -23,10 +41,18 @@
     .readme-title {
       @include text-topic;
       padding: var(--space-m);
+
+      @include mediaTablet {
+        padding: var(--space-xs);
+      }
     }
 
     .readme-content {
       padding: var(--space-xxl);
+
+      @include mediaTablet {
+        padding: var(--space-m);
+      }
     }
   }
 

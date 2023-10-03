@@ -19,7 +19,7 @@ export interface IRepoListStore {
 class RepoListStore implements IRepoListStore, ILocalStore {
   list: CollectionStore<number, RepoModel> = new CollectionStore<number, RepoModel>([], 'id');
   status: FetchStatusStore = new FetchStatusStore();
-  pagination: PaginationStore = new PaginationStore(9);
+  pagination: PaginationStore = new PaginationStore(12);
 
   constructor(props: GetRepoListProps) {
     makeObservable(this, {

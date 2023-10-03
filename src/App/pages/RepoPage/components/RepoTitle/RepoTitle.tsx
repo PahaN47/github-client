@@ -18,9 +18,11 @@ const RepoTitle: React.FC<RepoTitleProps> = ({ avatar, name }) => {
 
   return (
     <div className={cn['wrap']}>
-      <ArrowLeftIcon className={cn['back']} onClick={handleBackClick} />
-      <img className={cn['avatar']} src={avatar} />
-      <Text view="title" color="primary">
+      <div className={cn['content']}>
+        <ArrowLeftIcon className={cn['back']} onClick={handleBackClick} />
+        <img className={cn['avatar']} src={avatar} />
+      </div>
+      <Text className={cn['title']} view="title" color="primary" tag="p">
         {name}
       </Text>
     </div>

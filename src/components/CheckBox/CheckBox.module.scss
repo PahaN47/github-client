@@ -1,3 +1,5 @@
+@import "styles/mixins";
+
 .label {
   position: relative;
   display: flex;
@@ -36,6 +38,14 @@
     color: var(--checkbox-check-hover);
     background: var(--checkbox-bg-hover);
     border-color: var(--checkbox-border-hover);
+  }
+
+  @include mediaTouch {
+    &:active {
+      color: var(--checkbox-check-hover);
+      background: var(--checkbox-bg-hover);
+      border-color: var(--checkbox-border-hover);
+    }
   }
 
   &.disabled {

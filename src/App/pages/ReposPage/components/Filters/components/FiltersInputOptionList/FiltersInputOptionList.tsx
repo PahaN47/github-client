@@ -15,12 +15,11 @@ export type FiltersInputOptionListProps = {
   className?: string;
   options?: string[];
   onOptionSelect?: (option: string) => void;
-  onOptionEnter?: (option: string) => void;
   visible?: boolean;
 };
 
 const FiltersInputOptionList = forwardRef<HTMLDivElement, FiltersInputOptionListProps>(
-  ({ className, options, onOptionSelect, onOptionEnter, visible = false }, ref) => (
+  ({ className, options, onOptionSelect, visible = false }, ref) => (
     <CSSTransition
       in={!!options?.length && visible}
       nodeRef={ref}
@@ -28,9 +27,7 @@ const FiltersInputOptionList = forwardRef<HTMLDivElement, FiltersInputOptionList
       classNames={transitionClassNames}
     >
       <div className={classNames(className, cn['list'])} ref={ref}>
-        {options?.map((option) => (
-          <FiltersInputOption key={option} option={option} onSelect={onOptionSelect} onEnter={onOptionEnter} />
-        ))}
+        {options?.map((option) => <FiltersInputOption key={option} option={option} onSelect={onOptionSelect} />)}
       </div>
     </CSSTransition>
   ),

@@ -1,11 +1,22 @@
+@import "styles/mixins";
+
 .wrap {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-m) var(--space-page);
+  padding: var(--space-m) var(--space-page) var(--space-m) var(--space-xxl);
   color: var(--text-primary);
   background: var(--navbar-bg);
+
+  @include mediaSmallDesktop {
+    padding: var(--space-m) var(--space-xxxl);
+  }
+
+  @include mediaMobile {
+    padding-right: var(--space-xl);
+    padding-left: var(--space-xl);
+  }
 
   &::after {
     position: absolute;
@@ -17,29 +28,52 @@
     content: "";
   }
 
-  .loader {
-    width: 32px;
-  }
-
-  .logo-wrap {
+  .wrap-left {
     display: flex;
     align-items: center;
-    gap: var(--space-xl);
-    color: inherit;
-    text-decoration: none;
+    gap: calc(var(--space-page) - 2 * var(--space-xxl));
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--space-xl);
+      color: inherit;
+      text-decoration: none;
+
+      @include mediaTablet {
+        p {
+          display: none;
+        }
+
+        svg {
+          transform: translateX(50%);
+        }
+      }
+    }
+
+    .menu {
+      display: flex;
+      color: var(--text-secondary);
+      transition: all var(--default-duration);
+
+      &:hover {
+        color: var(--text-primary);
+      }
+
+      @include mediaTouch {
+        &:active {
+          color: var(--text-primary);
+        }
+      }
+    }
+
+    @include mediaTablet {
+      justify-content: space-between;
+      width: 50%;
+    }
   }
 
-  .menu {
-    position: absolute;
-    top: 50%;
-    left: var(--space-xxl);
-    display: flex;
-    color: var(--text-secondary);
-    transform: translateY(-50%);
-    transition: all var(--default-duration);
-
-    &:hover {
-      color: var(--text-primary);
-    }
+  .loader {
+    width: 32px;
   }
 }

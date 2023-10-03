@@ -1,8 +1,9 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { CSSTransition } from 'react-transition-group';
 import Avatar from 'components/Avatar';
 import Button from 'components/Button';
 import Text from 'components/Text';
+import { useClickOutside } from 'utils/hooks';
 import { NAVBAR_AVATAR_TRANSITION_DURATION } from './NavbarAvatar.const';
 import cn from './NavbarAvatar.module.scss';
 
@@ -20,12 +21,18 @@ export type NavbarAvatarProps = {
 
 const NavbarAvatar: React.FC<NavbarAvatarProps> = ({ src, login, onLogout }) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
-  const handleAvatarClick = useCallback(() => setIsMenuVisible((prev) => !prev), []);
-  const handleMenuClick = useCallback(() => setIsMenuVisible(false), []);
+  const handleClose = useCallback(() => setIsMenuVisible(false), []);
+  const handleOpen = useCallback(() => setIsMenuVisible(true), []);
+
+  const handleAvatarClick = useMemo(() => (isMenuVisible ? undefined : handleOpen), [handleOpen, isMenuVisible]);
+  const handleWrapClick = useMemo(() => (isMenuVisible ? handleClose : undefined), [handleClose, isMenuVisible]);
+
+  useClickOutside(wrapRef, handleClose);
 
   return (
-    <div className={cn['wrap']}>
+    <div className={cn['wrap']} onClick={handleWrapClick} ref={wrapRef}>
       <CSSTransition
         in={isMenuVisible}
         nodeRef={menuRef}
@@ -34,7 +41,7 @@ const NavbarAvatar: React.FC<NavbarAvatarProps> = ({ src, login, onLogout }) => 
         mountOnEnter
         unmountOnExit
       >
-        <div className={cn['menu']} onClick={handleMenuClick} ref={menuRef}>
+        <div className={cn['menu']} ref={menuRef}>
           <Text className={cn['login']} view="p-18" weight="medium" tag="div" maxLines={1}>
             {login}
           </Text>

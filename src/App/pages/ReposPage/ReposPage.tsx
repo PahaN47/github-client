@@ -52,10 +52,10 @@ const ReposPage: React.FC = () => {
   return (
     <PageLayout className={cn['page']}>
       <div className={cn['title']}>
-        <Text color="primary" view="title" maxLines={2}>
+        <Text className={cn['title-top']} color="primary" view="title" maxLines={3}>
           List organization repositories
         </Text>
-        <Text color="secondary" view="p-20" maxLines={2}>
+        <Text className={cn['title-bottom']} color="secondary" view="p-20" maxLines={2}>
           List repositories for specified organization
         </Text>
       </div>
