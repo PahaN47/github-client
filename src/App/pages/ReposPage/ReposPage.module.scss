@@ -13,11 +13,19 @@
   @include mediaSmallDesktop {
     padding: var(--space-xxxl);
     padding-right: calc(var(--space-xxxl) - 16px);
+
+    .no-scroll {
+      padding-right: var(--space-xxxl);
+    }
   }
 
   @include mediaMobile {
     padding-right: calc(var(--space-xl) - 16px);
     padding-left: var(--space-xl);
+
+    .no-scroll {
+      padding-right: var(--space-xl);
+    }
   }
 
   .title {

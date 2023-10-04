@@ -1,9 +1,11 @@
 import MarkdownPreview, { MarkdownPreviewProps } from '@uiw/react-markdown-preview';
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
+import { isSafariMobile } from 'config/isSafariMobile';
 import CurrentRepoStore from 'store/CurrentRepoStore';
 import { useLastSeenRepos, useLocalStore } from 'utils/hooks';
 import ContributorsList from './components/ContributorsList';
@@ -49,7 +51,7 @@ const RepoPage: React.FC = () => {
   }, [currentRepoStore.currentRepo]);
 
   return (
-    <PageLayout className={cn['page']} background="secondary">
+    <PageLayout className={classNames(cn['page'], isSafariMobile && cn['no-scroll'])} background="secondary">
       {!loading && currentRepoStore.currentRepo ? (
         <>
           <RepoTitle avatar={currentRepoStore.currentRepo.owner.avatarUrl} name={currentRepoStore.currentRepo.name} />

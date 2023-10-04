@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import { observer } from 'mobx-react';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -5,6 +6,7 @@ import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
 import Pagination from 'components/Pagination';
 import Text from 'components/Text';
+import { isSafariMobile } from 'config/isSafariMobile';
 import RepoListStore, { RepoType } from 'store/RepoListStore';
 import { arrayQuery, numberQuery, stringQuery } from 'store/models/QueryStore';
 import { getOptionKeys } from 'utils/getOptionKeys';
@@ -50,7 +52,7 @@ const ReposPage: React.FC = () => {
   );
 
   return (
-    <PageLayout className={cn['page']}>
+    <PageLayout className={classNames(cn['page'], isSafariMobile && cn['no-scroll'])}>
       <div className={cn['title']}>
         <Text className={cn['title-top']} color="primary" view="title" maxLines={3}>
           List organization repositories
