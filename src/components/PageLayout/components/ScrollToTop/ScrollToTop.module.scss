@@ -1,0 +1,82 @@
+@import "styles/mixins";
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 0;
+  opacity: 0;
+  transition: all var(--default-duration);
+
+  &-enter-active,
+  &-enter-done {
+    opacity: 1;
+  }
+
+  .container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: fit-content;
+
+    &:hover {
+      .outer-shadow .inner-shadow {
+        box-shadow: var(--scroll-to-top-shadow-hover);
+      }
+
+      .button .up-icon {
+        transform: rotate(180deg) scale(125%);
+      }
+    }
+
+    @include mediaTouch {
+      &:active {
+        .outer-shadow .inner-shadow {
+          box-shadow: var(--scroll-to-top-shadow-hover);
+        }
+
+        .button .up-icon {
+          transform: rotate(180deg) scale(125%);
+        }
+      }
+    }
+
+    .outer-shadow {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: fit-content;
+      overflow: hidden;
+      pointer-events: none;
+
+      .inner-shadow {
+        width: 100%;
+        height: 192px;
+        border-radius: 25%;
+        box-shadow: var(--scroll-to-top-shadow);
+        transform: translateY(-100%);
+        transition: all var(--default-duration);
+      }
+    }
+
+    .button {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: var(--space-s);
+      color: var(--scroll-to-top-button-color);
+      background: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+
+      .up-icon {
+        transform: rotate(180deg);
+        transition: all var(--default-duration);
+      }
+    }
+  }
+}
