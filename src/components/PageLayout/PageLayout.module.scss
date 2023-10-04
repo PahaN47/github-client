@@ -6,8 +6,17 @@
   align-items: stretch;
   height: 100%;
 
+  .top-anchor {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+  }
+
   .content {
     @include scroll-bar;
+    position: relative;
     flex-grow: 1;
 
     &[data-background="primary"] {

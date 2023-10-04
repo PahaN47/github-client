@@ -8,6 +8,7 @@
   // ANIMATIONS
   --default-duration: 500ms;
   --default-duration-short: 300ms;
+  --default-duration-long: 1s;
   --loader-animation-duration: 3s;
   --button-transition-duration: var(--default-duration);
   --card-transition-duration: var(--default-duration);
@@ -15,7 +16,7 @@
   --dropdown-option-transition-duration: var(--default-duration);
   --input-transition-duration: var(--default-duration);
   --input-check-transition-duration: 300ms;
-  --language-bar-animation-duration: 1s;
+  --language-bar-animation-duration: var(--default-duration-long);
   --layout-transition-duration: 300ms;
 
   // SPACING
@@ -131,4 +132,9 @@
 
   // SCROLLBAR COLORS
   --scroll-default: #00000033;
+
+  // SCROLL TO TOP
+  --scroll-to-top-shadow: 0 0 48px 48px var(--brand);
+  --scroll-to-top-shadow-hover: 0 0 64px 64px var(--brand);
+  --scroll-to-top-button-color: var(--text-brand-contrast);
 }

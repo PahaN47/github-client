@@ -66,7 +66,12 @@ const ReposPage: React.FC = () => {
   const getRepoLink = useCallback(({ name }: RepoModel) => `/repos/${org}/${name}`, [org]);
 
   return (
-    <PageLayout className={classNames(cn['page'], isSafariMobile && cn['no-scroll'])} ref={pageRef}>
+    <PageLayout
+      className={classNames(cn['page'], isSafariMobile && cn['no-scroll'])}
+      ref={pageRef}
+      useScrollToTop={query.all}
+      topScrollHeight="100%"
+    >
       <div className={cn['title']}>
         <Text className={cn['title-top']} color="primary" view="title" maxLines={3}>
           List organization repositories
