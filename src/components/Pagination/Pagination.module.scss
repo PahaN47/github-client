@@ -43,4 +43,11 @@
       transform: rotate(180deg);
     }
   }
+
+  .back,
+  .forward {
+    @include mediaTablet {
+      margin: 0;
+    }
+  }
 }

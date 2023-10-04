@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useEffect, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useLocalStore } from 'utils/hooks';
 import RootStore from './RootStore';
@@ -13,12 +13,22 @@ const RootStoreProvider = ({ children }: React.PropsWithChildren) => {
       new RootStore({
         queryStoreProps: { initialQs: search },
         lastSeenReposStoreProps: { length: 5 },
+        windowSizeStoreProps: { initialWidth: window.innerWidth, initialHeight: window.innerHeight },
       }),
   );
 
   useEffect(() => {
     rootStore.query.setQueryString(search);
   }, [search]);
+
+  useLayoutEffect(() => {
+    const handleResize = () => rootStore.windowSize.setSize(window.innerWidth, window.innerHeight);
+
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  });
 
   return <RootStoreContext.Provider value={rootStore}>{children}</RootStoreContext.Provider>;
 };

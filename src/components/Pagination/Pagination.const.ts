@@ -1,0 +1,2 @@
+export const PAGINATION_PAGE_SPREAD = 2;
+export const PAGINATION_MOBILE_PAGE_SPREAD = 1;

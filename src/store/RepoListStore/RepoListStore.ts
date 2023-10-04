@@ -38,6 +38,7 @@ class RepoListStore implements IRepoListStore, ILocalStore {
   getRepoList({ org, page = 1, types }: GetRepoListProps) {
     this.status.set(FetchStatus.PENDING);
     this.pagination.setPage(page);
+    this.list.set([]);
 
     const requestRepoList = axiosInstance
       .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
@@ -78,6 +79,8 @@ class RepoListStore implements IRepoListStore, ILocalStore {
   }
 
   addRepos({ org, types }: AddReposProps) {
+    this.status.set(FetchStatus.PENDING);
+
     const requestRepoList = axiosInstance
       .get<RepoApi[]>(API_ENDPOINTS.ORG(org).REPOS, {
         params: {
