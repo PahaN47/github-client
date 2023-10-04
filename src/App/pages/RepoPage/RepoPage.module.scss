@@ -16,7 +16,7 @@
     padding-right: calc(var(--space-xxxl) - 16px);
     padding-left: var(--space-xxxl);
 
-    &&.no-scroll {
+    &#{&}.no-scroll {
       padding-right: var(--space-xxxl);
     }
   }
@@ -25,7 +25,7 @@
     padding-right: calc(var(--space-xl) - 16px);
     padding-left: var(--space-xl);
 
-    &&.no-scroll {
+    &#{&}.no-scroll {
       padding-right: var(--space-xl);
     }
   }
