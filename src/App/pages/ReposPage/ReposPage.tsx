@@ -1,28 +1,29 @@
 import classNames from 'classnames';
 import { observer } from 'mobx-react';
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Loader from 'components/Loader';
 import PageLayout from 'components/PageLayout';
-import Pagination from 'components/Pagination';
 import Text from 'components/Text';
 import { isSafariMobile } from 'config/isSafariMobile';
 import RepoListStore, { RepoType } from 'store/RepoListStore';
-import { arrayQuery, numberQuery, stringQuery } from 'store/models/QueryStore';
+import { arrayQuery, booleanQuery, numberQuery, stringQuery } from 'store/models/QueryStore';
+import { RepoModel } from 'store/models/RepoListStore';
 import { getOptionKeys } from 'utils/getOptionKeys';
 import { getQueryString } from 'utils/getQueryString';
 import { useQuery } from 'utils/hooks';
 import { useLocalStore } from 'utils/hooks/useLocalStore';
 import Filters, { FilterValues } from './components/Filters';
-import RepoCard from './components/RepoCard';
+import RepoList from './components/RepoList';
 import cn from './ReposPage.module.scss';
 
 const repoPageQuery = {
   page: numberQuery(1),
   type: arrayQuery(stringQuery<RepoType>()),
+  all: booleanQuery(),
 };
 
 const ReposPage: React.FC = () => {
+  const pageRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useQuery(repoPageQuery);
 
   const navigate = useNavigate();
@@ -43,6 +44,10 @@ const ReposPage: React.FC = () => {
     });
   }, []);
 
+  const handleLoadMore = useCallback(() => {
+    repoListStore.addRepos({ org, types: query.type });
+  }, [org, query.type, repoListStore]);
+
   const handlePageChange = useCallback(
     (page: number) => {
       repoListStore.getRepoList({ org, page, types: query.type });
@@ -51,8 +56,17 @@ const ReposPage: React.FC = () => {
     [org, query.type],
   );
 
+  const handleShowAll = useCallback(() => {
+    repoListStore.getRepoList({ org, types: query.type });
+    setQuery({ type: query.type, all: true });
+    pageRef.current?.scrollTo(0, 0);
+  }, [org, query.type]);
+
+  const repoList = useMemo(() => Object.values(repoListStore.list.entities), [repoListStore.list.entities]);
+  const getRepoLink = useCallback(({ name }: RepoModel) => `/repos/${org}/${name}`, [org]);
+
   return (
-    <PageLayout className={classNames(cn['page'], isSafariMobile && cn['no-scroll'])}>
+    <PageLayout className={classNames(cn['page'], isSafariMobile && cn['no-scroll'])} ref={pageRef}>
       <div className={cn['title']}>
         <Text className={cn['title-top']} color="primary" view="title" maxLines={3}>
           List organization repositories
@@ -62,47 +76,16 @@ const ReposPage: React.FC = () => {
         </Text>
       </div>
       <Filters initialOrg={org} initialTypes={query.type} onSearch={handleSearch} loading={loading} />
-
-      <div className={cn['repo-list']}>
-        {loading ? (
-          <div className={cn['no-content-wrap']}>
-            <Loader className={cn['loader']} size="l" />
-          </div>
-        ) : repoListStore.list.order.length ? (
-          <>
-            <div className={cn['repos']}>
-              {repoListStore.list.order.map((id) => {
-                const { owner, name, description, stargazersCount, updatedAt } = repoListStore.list.entities[id];
-                return (
-                  <RepoCard
-                    key={id}
-                    link={`/repos/${org}/${name}`}
-                    avatar={owner.avatarUrl}
-                    name={name}
-                    description={description}
-                    stargazersCount={stargazersCount}
-                    updatedAt={updatedAt}
-                  />
-                );
-              })}
-            </div>
-            <Pagination
-              page={repoListStore.pagination.page}
-              onChange={handlePageChange}
-              pageCount={repoListStore.pagination.pageCount}
-            />
-          </>
-        ) : (
-          <div className={cn['no-content-wrap']}>
-            <Text view="p-20" weight="normal" color="primary">
-              Sorry, but nothing was found!
-            </Text>
-            <Text view="p-18" color="secondary">
-              Try adjusting your search
-            </Text>
-          </div>
-        )}
-      </div>
+      <RepoList
+        list={repoList}
+        pagination={repoListStore.pagination}
+        onPageChange={handlePageChange}
+        getRepoLink={getRepoLink}
+        infinite={query.all}
+        onSetInfinite={handleShowAll}
+        onLoadMore={handleLoadMore}
+        loading={loading}
+      />
     </PageLayout>
   );
 };

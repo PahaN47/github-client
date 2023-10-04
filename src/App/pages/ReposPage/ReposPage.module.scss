@@ -49,47 +49,4 @@
       }
     }
   }
-
-  .repo-list {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-    align-items: center;
-    gap: 41px;
-    width: 100%;
-    margin-top: 36px;
-
-    .repos {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: var(--space-xxxxl);
-      width: 100%;
-
-      @include mediaSmallDesktop {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      @include mediaTablet {
-        gap: var(--space-xxxl);
-      }
-
-      @include mediaMobile {
-        grid-template-columns: 1fr;
-      }
-
-      .card-caption {
-        display: flex;
-        align-items: center;
-      }
-    }
-
-    .no-content-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: var(--space-s);
-      margin-top: 80px;
-    }
-  }
 }
