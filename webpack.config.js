@@ -43,6 +43,7 @@ module.exports = {
   plugins: [
     new HTMLWebpackPlugin({
       template: path.join(srcPath, 'index.html'),
+      favicon: path.join(srcPath, 'assets/icons/logo.svg'),
     }),
     isDev && new ReactRefreshWebpackPlugin(),
     new MiniCssExtractPlugin({
