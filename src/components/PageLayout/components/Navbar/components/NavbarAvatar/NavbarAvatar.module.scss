@@ -10,7 +10,7 @@
     position: absolute;
     top: calc(var(--space-xxs) * -1);
     right: calc(var(--space-xxs) * -1);
-    z-index: 2;
+    z-index: 3;
     display: flex;
     flex-direction: column;
     gap: var(--space-xxs);
@@ -85,7 +85,7 @@
     }
 
     &:not(&-exit-done) + .avatar {
-      z-index: 2;
+      z-index: 3;
     }
   }
 }
